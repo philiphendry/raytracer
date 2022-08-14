@@ -3,6 +3,7 @@ using System.Drawing.Imaging;
 using System.Numerics;
 using CommandLine;
 using CommandLine.Text;
+using RayTracer.Materials;
 
 namespace RayTracer;
 
@@ -36,10 +37,17 @@ public static class Program
         var camera = new Camera(options.Width, aspectRatio.Item1 / aspectRatio.Item2);
         var bitmap = new Bitmap(camera.ImageWidth, camera.ImageHeight);
 
+        var materialGround = new LambertianMaterial(new Vector3(0.8f, 0.8f, 0.0f));
+        var materialCenter = new LambertianMaterial(new Vector3(0.7f, 0.3f, 0.3f));
+        var materialLeft = new MetalMaterial(new Vector3(0.8f, 0.8f, 0.8f));
+        var materialRight = new MetalMaterial(new Vector3(0.8f, 0.6f, 0.2f));
+
         var worldObjects = new List<IHittable>
         {
-            new Sphere(new Vector3(0.0f, 0.0f, -1.0f), 0.5f),
-            new Sphere(new Vector3(0.0f, -200.5f, -1.0f), 200.0f)
+            new Sphere(new Vector3(0.0f, 0.0f, -1.0f), 0.5f, materialCenter),
+            new Sphere(new Vector3(-1.0f, 0.0f, -1.0f), 0.5f, materialLeft),
+            new Sphere(new Vector3(1.0f, 0.0f, -1.0f), 0.5f, materialRight),
+            new Sphere(new Vector3(0.0f, -100.5f, -1.0f), 100.0f, materialGround)
         };
 
         var timer = new Stopwatch();
@@ -48,9 +56,11 @@ public static class Program
         using var progressBar = new ShellProgressBar.ProgressBar(220, "Generating render chunks");
         var progress = new Progress<RenderProgress>(progress =>
         {
+            // ReSharper disable AccessToDisposedClosure
             progressBar.Message = $"Rendered {progress.CompletedChunkCount} of {progress.TotalChunkCount}";
             progressBar.MaxTicks = progress.TotalChunkCount;
             progressBar.Tick(progress.CompletedChunkCount);
+            // ReSharper restore AccessToDisposedClosure
         });
 
         await new Renderer(camera, worldObjects, options).RenderAsync(bitmap, progress);

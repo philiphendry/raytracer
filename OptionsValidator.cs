@@ -26,6 +26,11 @@ public static class OptionsValidator
             return "Provide both width and height or the aspectratio.";
         }
 
+        if (options.DisableLambertian && !options.DisableMaterials)
+        {
+            return "Disabling Lambertian has no effect whilst materials are enabled";
+        }
+
         return null;
     }
 }

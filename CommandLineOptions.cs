@@ -41,9 +41,12 @@ public class CommandLineOptions
     [Option("chunksize", Required = false, HelpText = "The size to 'chunk' the image into and run in parallel.", Default = 50)]
     public int ChunkSize { get; set; }
 
-    [Option("normal-material", Required = false, HelpText = "Replaces all materials with a representation of the normal.")]
+    [Option("normal-material", Required = false, HelpText = "Replaces all materials with a representation of the normal.", Default = false)]
     public bool NormalMaterial { get; set; }
 
-    [Option("use-lambertian", Required = false, HelpText = "Use Lambertian distribution for calculating diffuse materials.")]
-    public bool UseLambertian { get; set; }
+    [Option("disable-materials", Required = false, HelpText = "Turns materials off and just calculates shading.", Default = false)]
+    public bool DisableMaterials { get; set; }
+
+    [Option("disable-lambertian", Required = false, HelpText = "Disable Lambertian distribution for calculating diffuse materials and use alternative algorithm.", Default = false)]
+    public bool DisableLambertian { get; set; }
 }

@@ -10,7 +10,8 @@ public class Renderer
     private readonly int _maxDepth;
     private readonly int _chunkSize;
     private readonly bool _normalMaterial;
-    private readonly bool _useLambertian;
+    private readonly bool _disableLambertian;
+    private readonly bool _disableMaterials;
 
     public Renderer(Camera camera, List<IHittable> worldObjects, CommandLineOptions options)
     {
@@ -20,7 +21,8 @@ public class Renderer
         _maxDepth = options.MaxDepth;
         _chunkSize = options.ChunkSize;
         _normalMaterial = options.NormalMaterial;
-        _useLambertian = options.UseLambertian;
+        _disableLambertian = options.DisableLambertian;
+        _disableMaterials = options.DisableMaterials;
     }
 
     public async Task RenderAsync(Bitmap bitmap, IProgress<RenderProgress> progress)
@@ -111,13 +113,13 @@ public class Renderer
             (int)(Math.Clamp(b, 0.0f, 0.999f) * 256));
     }
 
-    public Vector3 RayColour(Ray ray, List<IHittable> objects, int depth)
+    public Vector3 RayColour(Ray ray, List<IHittable> worldObjects, int depth)
     {
         // Reached max depth so don't collect any more light
         if (depth <= 0)
             return new Vector3(0.0f, 0.0f, 0.0f);
 
-        foreach (var hittable in objects)
+        foreach (var hittable in worldObjects)
         {
             var hitPoint = hittable.Hit(ray, 0.001f, float.PositiveInfinity);
             if (hitPoint != null)
@@ -128,13 +130,24 @@ public class Renderer
                     return Vector3.Multiply(new Vector3(hitPoint.Normal.X + 1.0f, hitPoint.Normal.Y + 1.0f, hitPoint.Normal.Z + 1.0f), 0.5f);
                 }
 
-                var target = _useLambertian
-                    ? hitPoint.Point + hitPoint.Normal + Vector3Utility.RandomUnitVector()
-                    : hitPoint.Point + Vector3Utility.RandomInHemisphere(hitPoint.Normal);
+                if (!_disableMaterials)
+                {
+                    var scatterResult = hitPoint.Material.Scatter(ray, hitPoint);
+                    return scatterResult == null
+                        ? new Vector3(0.0f, 0.0f, 0.0f)
+                        : scatterResult.Value.attenuation * RayColour(scatterResult.Value.scatteredRay, worldObjects, depth - 1);
+                }
 
-                return 0.5f * RayColour(new Ray(hitPoint.Point, target - hitPoint.Point), objects, depth - 1);
+                var target = _disableLambertian
+                    ? hitPoint.Point + Vector3Utility.RandomInHemisphere(hitPoint.Normal)
+                    : hitPoint.Point + hitPoint.Normal + Vector3Utility.RandomUnitVector();
+
+                return 0.5f * RayColour(new Ray(hitPoint.Point, target - hitPoint.Point), worldObjects, depth - 1);
             }
+
         }
+
+        // We didn't hit an object in the world so calculate a graded background colour
 
         // t is in the range -1 to 1 so normalise between 0 to 1
         var t = 0.5f * (ray.Direction.Unit().Y + 1.0f);

@@ -23,4 +23,7 @@ public static class Vector3Utility
 
     public static Vector3 RandomInHemisphere(Vector3 normal) 
         => Vector3.Dot(RandomPointInAUnitSphere(), normal) > 0.0f ? RandomPointInAUnitSphere() : -RandomPointInAUnitSphere();
+
+    public static Vector3 Reflect(Vector3 vector, Vector3 normal)
+        => vector - 2 * Vector3.Dot(vector, normal) * normal;
 }

@@ -1,16 +1,19 @@
 ﻿using System.Numerics;
+using RayTracer.Materials;
 
 namespace RayTracer;
 
 public class Sphere : IHittable
 {
-    public Vector3 Origin { get; init; }
-    public float Radius { get; init; }
+    public Vector3 Origin { get; }
+    public float Radius { get; }
+    public IMaterial Material { get; }
 
-    public Sphere(Vector3 origin, float radius)
+    public Sphere(Vector3 origin, float radius, IMaterial material)
     {
         Origin = origin;
         Radius = radius;
+        Material = material;
     }
 
     public HitPoint? Hit(Ray ray, float tMin, float tMax)
@@ -50,6 +53,6 @@ public class Sphere : IHittable
                 return null;
         }
 
-        return new HitPoint(ray, root, (ray.PositionAt(root) - Origin) / Radius);
+        return new HitPoint(ray, root, (ray.PositionAt(root) - Origin) / Radius, Material);
     }
 }

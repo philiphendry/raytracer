@@ -7,3 +7,7 @@
 ![3 Render With Maxdepth 1](renderings/3-render-with-maxdepth-1.png)
 
 ![4 Render With Maxdepth 10](renderings/4-render-with-maxdepth-10.png)
+
+![5 Render With Alternative Diffuser](renderings/5-render-with-alternative-diffuser.png)
+
+![6 Render With Materials](renderings/6-render-with-materials.png)
