@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Numerics;
+using System.Reflection;
 using CommandLine;
 using CommandLine.Text;
 using RayTracer.Materials;
+using RayTracer.Scenes;
 
 namespace RayTracer;
 
@@ -36,18 +38,7 @@ public static class Program
         var camera = new Camera(options.Width, options);
         var bitmap = new Bitmap(camera.ImageWidth, camera.ImageHeight);
 
-        var materialGround = new LambertianMaterial(new Vector3(0.8f, 0.8f, 0.0f));
-        var materialCenter = new LambertianMaterial(new Vector3(0.1f, 0.2f, 0.5f));
-        var materialLeft = new DielectricMaterial(1.5f);
-        var materialRight = new MetalMaterial(new Vector3(0.8f, 0.6f, 0.2f), 0.0f);
-
-        var worldObjects = new List<IHittable>
-        {
-            new Sphere(new Vector3(0.0f, 0.0f, -1.0f), 0.5f, materialCenter),
-            new Sphere(new Vector3(-1.0f, 0.0f, -1.0f), 0.5f, materialLeft),
-            new Sphere(new Vector3(1.0f, 0.0f, -1.0f), 0.5f, materialRight),
-            new Sphere(new Vector3(0.0f, -100.5f, -1.0f), 100.0f, materialGround)
-        };
+        var worldObjects = Utility.GetSceneGenerator(options.RenderSceneName)!.Build();
 
         var timer = new Stopwatch();
         timer.Start();

@@ -1,11 +1,12 @@
-﻿using System.Numerics;
+﻿using System.Collections.Immutable;
+using System.Numerics;
 
 namespace RayTracer;
 
 public class Renderer
 {
     private readonly Camera _camera;
-    private readonly List<IHittable> _worldObjects;
+    private readonly ImmutableArray<IHittable> _worldObjects;
     private readonly int _samplesPerPixel;
     private readonly int _maxDepth;
     private readonly int _chunkSize;
@@ -13,10 +14,10 @@ public class Renderer
     private readonly bool _disableLambertian;
     private readonly bool _disableMaterials;
 
-    public Renderer(Camera camera, List<IHittable> worldObjects, CommandLineOptions options)
+    public Renderer(Camera camera, IEnumerable<IHittable> worldObjects, CommandLineOptions options)
     {
         _camera = camera;
-        _worldObjects = worldObjects;
+        _worldObjects = worldObjects.ToImmutableArray();
         _samplesPerPixel = options.Samples;
         _maxDepth = options.MaxDepth;
         _chunkSize = options.ChunkSize;
@@ -113,8 +114,10 @@ public class Renderer
             (int)(Math.Clamp(b, 0.0f, 0.999f) * 256));
     }
 
-    public Vector3 RayColour(Ray ray, List<IHittable> worldObjects, int depth)
+    public Vector3 RayColour(Ray ray, ImmutableArray<IHittable> worldObjects, int depth)
     {
+        if (worldObjects == null) throw new ArgumentNullException(nameof(worldObjects));
+
         // Reached max depth so don't collect any more light
         if (depth <= 0)
             return new Vector3(0.0f, 0.0f, 0.0f);

@@ -1,11 +1,10 @@
 ﻿using System.Numerics;
+using RayTracer.Scenes;
 
 namespace RayTracer;
 
 public static class Utility
 {
-    
-
     public static float Random() => (float)System.Random.Shared.NextDouble();
 
     public static float Random(float min, float max) => min + (max - min) * (float)new Random().NextDouble();
@@ -61,5 +60,15 @@ public static class Utility
             // Otherwise call progress report lambda and do another round
             reportProgressAction(tasks);
         }
+    }
+
+    public static ISceneGenerator? GetSceneGenerator(string sceneName)
+    {
+        var sceneTypeName = $"{typeof(ISceneGenerator).Namespace}.{sceneName}";
+        var sceneType = typeof(ISceneGenerator).Assembly.GetType(sceneTypeName);
+        if (sceneType == null)
+            return null;
+
+        return Activator.CreateInstance(sceneType) as ISceneGenerator;
     }
 }

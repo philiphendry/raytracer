@@ -46,6 +46,11 @@ public static class OptionsValidator
             return "The camera-vertical must be specified as three numbers separated by commas e.g. 1.0,2.0,-2.0.";
         }
 
+        if (Utility.GetSceneGenerator(options.RenderSceneName) == null)
+        {
+            return $"The render-built-in-scene of '{options.RenderSceneName}' cannot be found as a built-in scene.";
+        }
+
         return null;
     }
 }
