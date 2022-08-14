@@ -6,14 +6,19 @@ public class Renderer
 {
     private readonly Camera _camera;
     private readonly List<IHittable> _worldObjects;
-    private readonly int _samplesPerPixel = 20;
-    private readonly int _maxDepth = 10;
-    private readonly int _chunkSize = 50;
+    private readonly int _samplesPerPixel;
+    private readonly int _maxDepth;
+    private readonly int _chunkSize;
+    private readonly bool _normalMaterial;
 
-    public Renderer(Camera camera, List<IHittable> worldObjects)
+    public Renderer(Camera camera, List<IHittable> worldObjects, CommandLineOptions options)
     {
         _camera = camera;
         _worldObjects = worldObjects;
+        _samplesPerPixel = options.Samples;
+        _maxDepth = options.MaxDepth;
+        _chunkSize = options.ChunkSize;
+        _normalMaterial = options.NormalMaterial;
     }
 
     public async Task RenderAsync(Bitmap bitmap, IProgress<RenderProgress> progress)
@@ -105,7 +110,7 @@ public class Renderer
             (int)(Math.Clamp(b, 0.0f, 0.999f) * 256));
     }
 
-    public static Vector3 RayColour(Ray ray, List<IHittable> objects, int depth)
+    public Vector3 RayColour(Ray ray, List<IHittable> objects, int depth)
     {
         // Reached max depth so don't collect any more light
         if (depth <= 0)
@@ -116,11 +121,14 @@ public class Renderer
             var hitPoint = hittable.Hit(ray, 0.001f, float.PositiveInfinity);
             if (hitPoint != null)
             {
+                if (_normalMaterial)
+                {
+                    // Because we have a unit normal we can convert to a colour
+                    return Vector3.Multiply(new Vector3(hitPoint.Normal.X + 1.0f, hitPoint.Normal.Y + 1.0f, hitPoint.Normal.Z + 1.0f), 0.5f);
+                }
+
                 var target = hitPoint.Point + hitPoint.Normal + Vector3Utility.RandomUnitVector();
                 return 0.5f * RayColour(new Ray(hitPoint.Point, target - hitPoint.Point), objects, depth - 1);
-
-                // Because we have a unit normal we can convert to a colour
-                //return Vector3.Multiply(new Vector3(hitPoint.Normal.X + 1.0f, hitPoint.Normal.Y + 1.0f, hitPoint.Normal.Z + 1.0f), 0.5f);
             }
         }
 

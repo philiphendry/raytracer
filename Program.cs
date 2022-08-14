@@ -1,14 +1,39 @@
 ﻿using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.Numerics;
+using CommandLine;
+using CommandLine.Text;
 
 namespace RayTracer;
 
 public static class Program
 {
     [STAThread]
-    static async Task Main()
+    static async Task Main(string[] args)
     {
-        var camera = new Camera(1000, 16.0f / 9.0f);
+        var parserResults = Parser.Default.ParseArguments<CommandLineOptions>(args);
+
+        if (parserResults.Tag == ParserResultType.NotParsed)
+        {
+            await parserResults.WithNotParsedAsync(_ => Task.FromResult(1));
+            return;
+        }
+
+        var message = OptionsValidator.Validate(parserResults.Value);
+        if (!string.IsNullOrEmpty(message)){
+            Console.WriteLine(HelpText.AutoBuild(parserResults, null, null));
+            Console.WriteLine(message);
+            Console.WriteLine();
+            return;
+        }
+
+        await parserResults.WithParsedAsync(RunAsync);
+    }
+
+    private static async Task RunAsync(CommandLineOptions options)
+    {
+        var aspectRatio = options.GetAspectRatio();
+        var camera = new Camera(options.Width, aspectRatio.Item1 / aspectRatio.Item2);
         var bitmap = new Bitmap(camera.ImageWidth, camera.ImageHeight);
 
         var worldObjects = new List<IHittable>
@@ -28,12 +53,22 @@ public static class Program
             progressBar.Tick(progress.CompletedChunkCount);
         });
 
-        await new Renderer(camera, worldObjects).RenderAsync(bitmap, progress);
+        await new Renderer(camera, worldObjects, options).RenderAsync(bitmap, progress);
 
         timer.Stop();
         Console.WriteLine($"Rendering took {timer.ElapsedMilliseconds}ms");
 
-        ShowBitmap(bitmap);
+        var filename = $"render_{DateTime.Now.ToString("s").Replace(':', '-')}.png";
+        if (options.SaveOutput)
+        {
+            bitmap.Save(filename, ImageFormat.Png);
+
+            if (options.ViewOutput) 
+                Process.Start(new ProcessStartInfo(filename) { UseShellExecute = true, Verb = "open" });
+        }
+
+        if (options.ViewInWindow)
+            ShowBitmap(bitmap);
     }
 
     private static void ShowBitmap(Bitmap bitmap)
