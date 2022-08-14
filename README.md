@@ -13,3 +13,5 @@
 ![6 Render With Materials](renderings/6-render-with-materials.png)
 
 ![7 Render With Metal Fuzziness](renderings/7-render-with-metal-fuzziness.png)
+
+![8 Render With Refraction](renderings/8-render-with-refraction.png)

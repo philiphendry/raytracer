@@ -38,9 +38,9 @@ public static class Program
         var bitmap = new Bitmap(camera.ImageWidth, camera.ImageHeight);
 
         var materialGround = new LambertianMaterial(new Vector3(0.8f, 0.8f, 0.0f));
-        var materialCenter = new LambertianMaterial(new Vector3(0.7f, 0.3f, 0.3f));
-        var materialLeft = new MetalMaterial(new Vector3(0.8f, 0.8f, 0.8f), 0.3f);
-        var materialRight = new MetalMaterial(new Vector3(0.8f, 0.6f, 0.2f), 1.0f);
+        var materialCenter = new LambertianMaterial(new Vector3(0.1f, 0.2f, 0.5f));
+        var materialLeft = new DielectricMaterial(1.5f);
+        var materialRight = new MetalMaterial(new Vector3(0.8f, 0.6f, 0.2f), 0.0f);
 
         var worldObjects = new List<IHittable>
         {

@@ -26,4 +26,28 @@ public static class Vector3Utility
 
     public static Vector3 Reflect(Vector3 vector, Vector3 normal)
         => vector - 2 * Vector3.Dot(vector, normal) * normal;
+
+    /// <summary>
+    /// Returns a refracted ray solved according to Snell's law :
+    ///
+    ///     eta * sin theta = eta` * sin theta`
+    ///
+    /// Where eta and eta` are the refractive indices of the two materials such that,
+    /// for example, air is 1.0, glass = 1.3-1.7 and diamond = 2.4.
+    ///
+    /// theta and theta` is the angle to the normal of the incoming and refracted
+    /// ray respectively.
+    /// 
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <param name="normal"></param>
+    /// <param name="refractionIndexRatio"></param>
+    /// <returns></returns>
+    public static Vector3 Refract(Vector3 vector, Vector3 normal, float refractionIndexRatio)
+    {
+        var cosTheta = (float)Math.Min(Vector3.Dot(-vector, normal), 1.0);
+        var rayOutPerpendicular = refractionIndexRatio * (vector + Vector3.Multiply(normal, cosTheta));
+        var rayOutParallel = Vector3.Multiply(normal, -(float)Math.Sqrt((1.0 - rayOutPerpendicular.LengthSquared())));
+        return rayOutPerpendicular + rayOutParallel;
+    }
 }

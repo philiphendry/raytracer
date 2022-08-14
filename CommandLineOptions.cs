@@ -21,7 +21,7 @@ public class CommandLineOptions
     public int Height { get; set; }
 
     [Option("aspectratio", Required = false, HelpText = "The aspect ratio of the rendered image expressed in the format n:m. Only provide width or height as the dimension not provided will be calculated.")]
-    public string AspectRatio { get; set; }
+    public string? AspectRatio { get; set; }
 
     public (float, float) GetAspectRatio()
     {
