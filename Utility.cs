@@ -4,9 +4,13 @@ namespace RayTracer;
 
 public static class Utility
 {
+    
+
     public static float Random() => (float)System.Random.Shared.NextDouble();
 
     public static float Random(float min, float max) => min + (max - min) * (float)new Random().NextDouble();
+
+    public static float DegreesToRadians(float degrees) => degrees * Constants.PI / 180.0f;
 
     /// <summary>
     /// Given a range of 1 to totalCount this function returns the range chunked into

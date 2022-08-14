@@ -49,4 +49,7 @@ public class CommandLineOptions
 
     [Option("disable-lambertian", Required = false, HelpText = "Disable Lambertian distribution for calculating diffuse materials and use alternative algorithm.", Default = false)]
     public bool DisableLambertian { get; set; }
+
+    [Option("field-of-view", Required = false, HelpText = "The vertical field of view in degrees.", Default = 60.0f)]
+    public float VerticalFieldOfView { get; set; }
 }

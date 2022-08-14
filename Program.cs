@@ -33,8 +33,7 @@ public static class Program
 
     private static async Task RunAsync(CommandLineOptions options)
     {
-        var aspectRatio = options.GetAspectRatio();
-        var camera = new Camera(options.Width, aspectRatio.Item1 / aspectRatio.Item2);
+        var camera = new Camera(options.Width, options);
         var bitmap = new Bitmap(camera.ImageWidth, camera.ImageHeight);
 
         var materialGround = new LambertianMaterial(new Vector3(0.8f, 0.8f, 0.0f));

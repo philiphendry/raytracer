@@ -8,7 +8,7 @@ public class Camera
     public int ImageWidth { get; init; }
     public int ImageHeight { get; init; }
 
-    private float ViewportHeight { get; } = 2.0f;
+    private float ViewportHeight { get; }
     private float ViewportWidth { get; }
     private float FocalLength { get; } = 1.0f;
 
@@ -17,13 +17,19 @@ public class Camera
     private Vector3 Vertical { get; }
     private Vector3 LowerLeftCorner { get; }
 
-    public Camera(int imageWidth, float aspectRatio)
+    public Camera(int imageWidth, CommandLineOptions options)
     {
-        AspectRatio = aspectRatio;
-        ImageWidth = imageWidth;
-        ImageHeight = Convert.ToInt32(imageWidth / aspectRatio);
+        var aspectRatio = options.GetAspectRatio();
+        AspectRatio = aspectRatio.Item1 / aspectRatio.Item2;
 
-        ViewportWidth = aspectRatio * ViewportHeight;
+        var theta = Utility.DegreesToRadians(options.VerticalFieldOfView);
+        var h = (float)Math.Tan(theta / 2);
+        ViewportHeight = 2.0f * h;
+        ViewportWidth = AspectRatio * ViewportHeight;
+
+        ImageWidth = imageWidth;
+        ImageHeight = Convert.ToInt32(imageWidth / AspectRatio);
+
         Horizontal = new Vector3(ViewportWidth, 0, 0);
         Vertical = new Vector3(0, ViewportHeight, 0);
         LowerLeftCorner = Origin - Vector3.Divide(Horizontal, 2f) - Vector3.Divide(Vertical, 2f) - new Vector3(0, 0, FocalLength);
