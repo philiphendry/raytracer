@@ -2,5 +2,5 @@
 
 public interface ISceneGenerator
 {
-    IEnumerable<IHittable> Build();
+    IEnumerable<IHittable> Build(CommandLineOptions options);
 }

@@ -5,8 +5,15 @@ namespace RayTracer.Scenes;
 
 public class FirstScene : ISceneGenerator
 {
-    public IEnumerable<IHittable> Build()
+    public IEnumerable<IHittable> Build(CommandLineOptions options)
     {
+        options.CameraPosition = "0,0,0";
+        options.CameraLookAt = "0,0,-1";
+        options.CameraVertical = "0,1,0";
+        options.Aperture = 0.01f;
+        options.FocusDistance = 10.0f;
+        options.VerticalFieldOfView = 60.0f;
+
         var materialGround = new LambertianMaterial(new Vector3(0.8f, 0.8f, 0.0f));
         var materialCenter = new LambertianMaterial(new Vector3(0.1f, 0.2f, 0.5f));
         var materialLeft = new DielectricMaterial(1.5f);

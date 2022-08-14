@@ -43,7 +43,7 @@ public class Camera
         _u = Vector3.Cross(vertical, _w).Unit();
         _v = Vector3.Cross(_w, _u);
 
-        var focusDistance = (_origin - lookAt).Length();
+        var focusDistance = options.FocusDistance;
 
         _horizontal = Vector3.Multiply(_u, _viewportWidth * focusDistance);
         _vertical = Vector3.Multiply(_v, _viewportHeight * focusDistance);

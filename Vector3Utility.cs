@@ -41,7 +41,7 @@ public static class Vector3Utility
     public static Vector3 Reflect(Vector3 vector, Vector3 normal)
         => vector - 2 * Vector3.Dot(vector, normal) * normal;
 
-    public static Vector3 FromString(string vector)
+    public static Vector3 FromString(string? vector)
     {
         var matches = VectorRegex.Match(vector);
         return new Vector3(float.Parse(matches.Groups["x"].Value), float.Parse(matches.Groups["y"].Value), float.Parse(matches.Groups["z"].Value));

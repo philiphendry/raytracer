@@ -14,6 +14,7 @@ public class HitPoint
     public HitPoint(Ray ray, float t, Vector3 outwardNormal, IMaterial material)
     {
         Point = ray.PositionAt(t);
+        T = t;
         FrontFace = Vector3.Dot(ray.Direction, outwardNormal) < 0;
         Normal = FrontFace ? outwardNormal : -outwardNormal;
         Material = material;

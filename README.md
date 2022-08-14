@@ -23,3 +23,5 @@
 ![11 Render With Cemera Positioned](renderings/11-render-with-cemera-positioned.png)
 
 ![12 Render With Large Aperture](renderings/12-render-with-large-aperture.png)
+
+![13 Render With Many Balls](renderings/13-render-with-many-balls.png)

@@ -133,32 +133,41 @@ public class Renderer
         if (depth <= 0)
             return new Vector3(0.0f, 0.0f, 0.0f);
 
+        HitPoint? hitPoint = null;
+        var closestT = float.PositiveInfinity;
         foreach (var hittable in worldObjects)
         {
-            var hitPoint = hittable.Hit(ray, 0.001f, float.PositiveInfinity);
-            if (hitPoint != null)
+            var nextHitPoint = hittable.Hit(ray, 0.001f, closestT);
+            if (nextHitPoint != null)
             {
-                if (_normalMaterial)
-                {
-                    // Because we have a unit normal we can convert to a colour
-                    return Vector3.Multiply(new Vector3(hitPoint.Normal.X + 1.0f, hitPoint.Normal.Y + 1.0f, hitPoint.Normal.Z + 1.0f), 0.5f);
-                }
+                hitPoint = nextHitPoint;
+                closestT = nextHitPoint.T;
+            }
+        }
 
-                if (!_disableMaterials)
-                {
-                    var scatterResult = hitPoint.Material.Scatter(ray, hitPoint);
-                    return scatterResult == null
-                        ? new Vector3(0.0f, 0.0f, 0.0f)
-                        : scatterResult.Value.attenuation * RayColour(scatterResult.Value.scatteredRay, worldObjects, depth - 1);
-                }
-
-                var target = _disableLambertian
-                    ? hitPoint.Point + Vector3Utility.RandomInHemisphere(hitPoint.Normal)
-                    : hitPoint.Point + hitPoint.Normal + Vector3Utility.RandomUnitVector();
-
-                return 0.5f * RayColour(new Ray(hitPoint.Point, target - hitPoint.Point), worldObjects, depth - 1);
+        if (hitPoint != null)
+        {
+            if (_normalMaterial)
+            {
+                // Because we have a unit normal we can convert to a colour
+                return Vector3.Multiply(
+                    new Vector3(hitPoint.Normal.X + 1.0f, hitPoint.Normal.Y + 1.0f, hitPoint.Normal.Z + 1.0f), 0.5f);
             }
 
+            if (!_disableMaterials)
+            {
+                var scatterResult = hitPoint.Material.Scatter(ray, hitPoint);
+                return scatterResult == null
+                    ? new Vector3(0.0f, 0.0f, 0.0f)
+                    : scatterResult.Value.attenuation *
+                      RayColour(scatterResult.Value.scatteredRay, worldObjects, depth - 1);
+            }
+
+            var target = _disableLambertian
+                ? hitPoint.Point + Vector3Utility.RandomInHemisphere(hitPoint.Normal)
+                : hitPoint.Point + hitPoint.Normal + Vector3Utility.RandomUnitVector();
+
+            return 0.5f * RayColour(new Ray(hitPoint.Point, target - hitPoint.Point), worldObjects, depth - 1);
         }
 
         // We didn't hit an object in the world so calculate a graded background colour

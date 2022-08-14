@@ -62,7 +62,7 @@ public static class Utility
         }
     }
 
-    public static ISceneGenerator? GetSceneGenerator(string sceneName)
+    public static ISceneGenerator? GetSceneGenerator(string? sceneName)
     {
         var sceneTypeName = $"{typeof(ISceneGenerator).Namespace}.{sceneName}";
         var sceneType = typeof(ISceneGenerator).Assembly.GetType(sceneTypeName);

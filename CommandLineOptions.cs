@@ -22,7 +22,7 @@ public class CommandLineOptions
     public int Height { get; set; }
 
     [Option("render-built-in-scene", Required = false, HelpText = "Provide the name of a built-in scene.", Default = nameof(FirstScene))]
-    public string RenderSceneName { get; set; }
+    public string? RenderSceneName { get; set; }
 
     [Option("aspectratio", Required = false, HelpText = "The aspect ratio of the rendered image expressed in the format n:m. Only provide width or height as the dimension not provided will be calculated.")]
     public string? AspectRatio { get; set; }
@@ -60,12 +60,15 @@ public class CommandLineOptions
     [Option("aperture", Required = false, HelpText = "The aperture of the camera with larger values producing greater depth-of-field.", Default = 0.5f)]
     public float Aperture { get; set; }
 
+    [Option("focus-distance", Required = false, HelpText = "The distance from camera to viewport.", Default = 10.0f)]
+    public float FocusDistance { get; set; }
+
     [Option("camera-position", Required = false, HelpText="A position for the camera", Default = "0.0,0.0,0.0")]
-    public string CameraPosition { get; set; }
+    public string? CameraPosition { get; set; }
 
     [Option("camera-look-at", Required = false, HelpText = "A position for the camera to look at", Default = "0.0,0.0,-1.0")]
-    public string CameraLookAt { get; set; }
+    public string? CameraLookAt { get; set; }
 
     [Option("camera-vertical", Required = false, HelpText = "A vector for the camera vertical position", Default = "0.0,1.0,0.0")]
-    public string CameraVertical { get; set; }
+    public string? CameraVertical { get; set; }
 }
