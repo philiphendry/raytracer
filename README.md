@@ -21,3 +21,5 @@
 ![10 Render With A Field Of View](renderings/10-render-with-a-field-of-view.png)
 
 ![11 Render With Cemera Positioned](renderings/11-render-with-cemera-positioned.png)
+
+![12 Render With Large Aperture](renderings/12-render-with-large-aperture.png)

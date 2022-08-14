@@ -27,6 +27,17 @@ public static class Vector3Utility
     public static Vector3 RandomInHemisphere(Vector3 normal) 
         => Vector3.Dot(RandomPointInAUnitSphere(), normal) > 0.0f ? RandomPointInAUnitSphere() : -RandomPointInAUnitSphere();
 
+    public static Vector3 RandomInUnitDisk()
+    {
+        while (true)
+        {
+            var point = new Vector3(Utility.Random(-1.0f, 1.0f), Utility.Random(-1.0f, 1.0f), 0);
+            if (point.LengthSquared() >= 1)
+                continue;
+            return point;
+        }
+    }
+
     public static Vector3 Reflect(Vector3 vector, Vector3 normal)
         => vector - 2 * Vector3.Dot(vector, normal) * normal;
 

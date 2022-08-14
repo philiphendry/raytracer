@@ -4,44 +4,61 @@ namespace RayTracer;
 
 public class Camera
 {
-    private float AspectRatio { get; }
-    public int ImageWidth { get; init; }
-    public int ImageHeight { get; init; }
+    private readonly float _lensRadius;
+    private readonly float _aspectRatio;
 
-    private float ViewportHeight { get; }
-    private float ViewportWidth { get; }
+    private readonly float _viewportHeight;
+    private readonly float _viewportWidth;
 
-    private Vector3 Origin { get; }
-    private Vector3 Horizontal { get; }
-    private Vector3 Vertical { get; }
-    private Vector3 LowerLeftCorner { get; }
+    private readonly Vector3 _origin;
+    private readonly Vector3 _horizontal;
+    private readonly Vector3 _vertical;
+    private readonly Vector3 _lowerLeftCorner;
+
+    private readonly Vector3 _w;
+    private readonly Vector3 _u;
+    private readonly Vector3 _v;
+
+    public int ImageWidth { get; }
+    public int ImageHeight { get; }
 
     public Camera(int imageWidth, CommandLineOptions options)
     {
         var aspectRatio = options.GetAspectRatio();
-        AspectRatio = aspectRatio.Item1 / aspectRatio.Item2;
+        _aspectRatio = aspectRatio.Item1 / aspectRatio.Item2;
 
         var theta = Utility.DegreesToRadians(options.VerticalFieldOfView);
         var h = (float)Math.Tan(theta / 2);
-        ViewportHeight = 2.0f * h;
-        ViewportWidth = AspectRatio * ViewportHeight;
+        _viewportHeight = 2.0f * h;
+        _viewportWidth = _aspectRatio * _viewportHeight;
 
         ImageWidth = imageWidth;
-        ImageHeight = Convert.ToInt32(imageWidth / AspectRatio);
+        ImageHeight = Convert.ToInt32(imageWidth / _aspectRatio);
 
-        Origin = Vector3Utility.FromString(options.CameraPosition);
+        _origin = Vector3Utility.FromString(options.CameraPosition);
         var lookAt = Vector3Utility.FromString(options.CameraLookAt);
         var vertical = Vector3Utility.FromString(options.CameraVertical);
 
-        var w = (Origin - lookAt).Unit();
-        var u = Vector3.Cross(vertical, w).Unit();
-        var v = Vector3.Cross(w, u);
+        _w = (_origin - lookAt).Unit();
+        _u = Vector3.Cross(vertical, _w).Unit();
+        _v = Vector3.Cross(_w, _u);
 
-        Horizontal = Vector3.Multiply(u, ViewportWidth);
-        Vertical = Vector3.Multiply(v, ViewportHeight);
-        LowerLeftCorner = Origin - Vector3.Divide(Horizontal, 2f) - Vector3.Divide(Vertical, 2f) - w;
+        var focusDistance = (_origin - lookAt).Length();
+
+        _horizontal = Vector3.Multiply(_u, _viewportWidth * focusDistance);
+        _vertical = Vector3.Multiply(_v, _viewportHeight * focusDistance);
+        _lowerLeftCorner = _origin - Vector3.Divide(_horizontal, 2f) - Vector3.Divide(_vertical, 2f) - _w * focusDistance;
+
+        _lensRadius = options.Aperture / 2.0f;
     }
 
     public Ray GetRay(float u, float v)
-        => new(Origin, LowerLeftCorner + Vector3.Multiply(Horizontal, u) + Vector3.Multiply(Vertical, v) - Origin);
+    {
+        var randomPoint = _lensRadius * Vector3Utility.RandomInUnitDisk();
+        var offset = Vector3.Multiply(_u, randomPoint.X) + Vector3.Multiply(_v, randomPoint.Y);
+        
+        return new(
+            _origin + offset, 
+            _lowerLeftCorner + Vector3.Multiply(_horizontal, u) + Vector3.Multiply(_vertical, v) - _origin - offset);
+    }
 }

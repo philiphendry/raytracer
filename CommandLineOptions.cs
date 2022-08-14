@@ -53,6 +53,9 @@ public class CommandLineOptions
     [Option("field-of-view", Required = false, HelpText = "The vertical field of view in degrees.", Default = 60.0f)]
     public float VerticalFieldOfView { get; set; }
 
+    [Option("aperture", Required = false, HelpText = "The aperture of the camera with larger values producing greater depth-of-field.", Default = 0.5f)]
+    public float Aperture { get; set; }
+
     [Option("camera-position", Required = false, HelpText="A position for the camera", Default = "0.0,0.0,0.0")]
     public string CameraPosition { get; set; }
 
@@ -61,5 +64,4 @@ public class CommandLineOptions
 
     [Option("camera-vertical", Required = false, HelpText = "A vector for the camera vertical position", Default = "0.0,1.0,0.0")]
     public string CameraVertical { get; set; }
-
 }
