@@ -1,11 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.Numerics;
-using System.Reflection;
 using CommandLine;
 using CommandLine.Text;
-using RayTracer.Materials;
-using RayTracer.Scenes;
 
 namespace RayTracer;
 
@@ -47,13 +43,14 @@ public static class Program
         var progress = new Progress<RenderProgress>(progress =>
         {
             // ReSharper disable AccessToDisposedClosure
-            progressBar.Message = $"Rendered {progress.CompletedChunkCount} of {progress.TotalChunkCount}";
-            progressBar.MaxTicks = progress.TotalChunkCount;
-            progressBar.Tick(progress.CompletedChunkCount);
+            progressBar.Message = $"Rendered {progress.Completed} of {progress.Total}";
+            progressBar.MaxTicks = progress.Total;
+            progressBar.Tick(progress.Completed);
             // ReSharper restore AccessToDisposedClosure
         });
 
-        await new Renderer(camera, worldObjects, options).RenderAsync(bitmap, progress);
+        var cancellationTokenSource = new CancellationTokenSource();
+        await new Renderer(camera, worldObjects, options).RenderAsync(bitmap, progress, cancellationTokenSource.Token);
 
         timer.Stop();
         Console.WriteLine($"Rendering took {timer.ElapsedMilliseconds}ms");

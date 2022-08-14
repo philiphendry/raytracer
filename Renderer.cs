@@ -13,6 +13,7 @@ public class Renderer
     private readonly bool _normalMaterial;
     private readonly bool _disableLambertian;
     private readonly bool _disableMaterials;
+    private int _completedChunks;
 
     public Renderer(Camera camera, IEnumerable<IHittable> worldObjects, CommandLineOptions options)
     {
@@ -26,58 +27,64 @@ public class Renderer
         _disableMaterials = options.DisableMaterials;
     }
 
-    public async Task RenderAsync(Bitmap bitmap, IProgress<RenderProgress> progress)
+    public async Task RenderAsync(
+        Bitmap bitmap, 
+        IProgress<RenderProgress> progress,
+        CancellationToken cancellationToken)
     {
-        var renderTasks = new List<Task<List<(int, int, Vector3)>>>();
-        var rangeX = Utility.ChunkedRange(_camera.ImageWidth, _chunkSize);
-        var rangeY = Utility.ChunkedRange(_camera.ImageHeight, _chunkSize);
+        var renderTasks = (
+            from chunkX in Utility.ChunkedRange(_camera.ImageWidth, _chunkSize)
+            from chunkY in Utility.ChunkedRange(_camera.ImageHeight, _chunkSize)
+            select (chunkX.Item1, chunkY.Item1, chunkX.Item2, chunkY.Item2)
+        ).ToImmutableArray();
 
-        foreach (var chunkX in rangeX)
+        _completedChunks = 0;
+        await Parallel.ForEachAsync(
+            renderTasks,
+            cancellationToken,
+            async (chunk, ct) => await RenderChunkAsync(chunk.Item1, chunk.Item2, chunk.Item3, chunk.Item4, bitmap, renderTasks.Length, progress, ct));
+    }
+
+    private async Task RenderChunkAsync(
+        int startX,
+        int startY,
+        int endX,
+        int endY,
+        Bitmap bitmap,
+        int totalTaskCount,
+        IProgress<RenderProgress> progress,
+        CancellationToken cancellationToken)
+    {
+        var result = await RenderAsync(startX, startY, endX, endY, cancellationToken);
+        if (result == null)
+            return;
+
+        foreach (var renderedPixel in result)
         {
-            foreach (var chunkY in rangeY)
+            // Coordinates in bitmap are zero-based but the rendered is one-based
+            lock (bitmap)
             {
-                renderTasks.Add(Task.Run(async () => await RenderAsync(chunkX.Item1, chunkY.Item1, chunkX.Item2, chunkY.Item2)));
-            }
-        }
-
-        // get Task which completes when all 'tasks' have completed
-        var render = Task.WhenAll(renderTasks);
-        for (;;)
-        {
-            // get Task which completes after 250ms
-            var timer = Task.Delay(250); // you might want to make this configurable
-            // Wait until either all tasks have completed OR 250ms passed
-            await Task.WhenAny(render, timer);
-
-            progress.Report(new RenderProgress
-            {
-                TotalChunkCount = renderTasks.Count, 
-                CompletedChunkCount = renderTasks.Count(t => t.IsCompleted)
-            });
-
-            await Task.Yield();
-
-            // if all tasks have completed, complete the returned task
-            if (render.IsCompleted)
-            {
-                break;
-            }
-        }
-
-        foreach (var renderChunk in render.Result)
-        {
-            foreach (var renderedPixel in renderChunk)
-            {
-                // Coordinates in bitmap are zero-based but the rendered is one-based
                 bitmap.SetPixel(
                     renderedPixel.Item1 - 1,
                     _camera.ImageHeight - renderedPixel.Item2,
                     VectorToColour(renderedPixel.Item3, _samplesPerPixel));
             }
         }
+
+        Interlocked.Increment(ref _completedChunks);
+        progress.Report(new RenderProgress
+        {
+            Total = totalTaskCount,
+            Completed = _completedChunks
+        });
     }
 
-    private async Task<List<(int, int, Vector3)>> RenderAsync(int startX, int startY, int endX, int endY)
+    private async Task<List<(int, int, Vector3)>?> RenderAsync(
+        int startX, 
+        int startY, 
+        int endX, 
+        int endY,
+        CancellationToken cancellationToken)
     {
         var render = new List<(int, int, Vector3)>();
         for (var y = startY; y <= endY; y++)
@@ -93,8 +100,12 @@ public class Renderer
                     rayColour += RayColour(ray, _worldObjects, _maxDepth);
                 }
                 render.Add((x, y, rayColour));
-                await Task.Yield();
             }
+
+            await Task.Yield();
+
+            if (cancellationToken.IsCancellationRequested)
+                return null;
         }
         return render;
     }

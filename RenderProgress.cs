@@ -2,6 +2,6 @@
 
 public class RenderProgress
 {
-    public int TotalChunkCount { get; init; }
-    public int CompletedChunkCount { get; init; }
+    public int Total { get; init; }
+    public int Completed { get; init; }
 }

@@ -2,7 +2,7 @@
   "profiles": {
     "RayTracer": {
       "commandName": "Project",
-      "commandLineArgs": "--viewoutput --saveoutput --width 800 --height 400 --camera-position=-2,2,1 --camera-look-at=0,0,-1 --field-of-view=20"
+      "commandLineArgs": "--viewoutput --saveoutput --width 800 --height 400 --camera-position=-2,2,1 --camera-look-at=0,0,-1 --field-of-view=20 --samples=20 --maxdepth=10"
     }
   }
 }
