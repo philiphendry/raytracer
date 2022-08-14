@@ -1,9 +1,12 @@
 ﻿using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace RayTracer;
 
 public static class Vector3Utility
 {
+    public static Regex VectorRegex = new (@"^(?<x>-?\d+(\.\d+)?),(?<y>-?\d+(\.\d+)?),(?<z>-?\d+(\.\d+)?)$", RegexOptions.Compiled);
+
     public static Vector3 Random() => new(Utility.Random(), Utility.Random(), Utility.Random());
 
     public static Vector3 Random(float min, float max) => new(Utility.Random(min, max), Utility.Random(min, max), Utility.Random(min, max));
@@ -26,6 +29,12 @@ public static class Vector3Utility
 
     public static Vector3 Reflect(Vector3 vector, Vector3 normal)
         => vector - 2 * Vector3.Dot(vector, normal) * normal;
+
+    public static Vector3 FromString(string vector)
+    {
+        var matches = VectorRegex.Match(vector);
+        return new Vector3(float.Parse(matches.Groups["x"].Value), float.Parse(matches.Groups["y"].Value), float.Parse(matches.Groups["z"].Value));
+    }
 
     /// <summary>
     /// Returns a refracted ray solved according to Snell's law :

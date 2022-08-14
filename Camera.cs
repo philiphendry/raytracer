@@ -10,9 +10,8 @@ public class Camera
 
     private float ViewportHeight { get; }
     private float ViewportWidth { get; }
-    private float FocalLength { get; } = 1.0f;
 
-    private Vector3 Origin { get; } = Vector3.Zero;
+    private Vector3 Origin { get; }
     private Vector3 Horizontal { get; }
     private Vector3 Vertical { get; }
     private Vector3 LowerLeftCorner { get; }
@@ -30,9 +29,17 @@ public class Camera
         ImageWidth = imageWidth;
         ImageHeight = Convert.ToInt32(imageWidth / AspectRatio);
 
-        Horizontal = new Vector3(ViewportWidth, 0, 0);
-        Vertical = new Vector3(0, ViewportHeight, 0);
-        LowerLeftCorner = Origin - Vector3.Divide(Horizontal, 2f) - Vector3.Divide(Vertical, 2f) - new Vector3(0, 0, FocalLength);
+        Origin = Vector3Utility.FromString(options.CameraPosition);
+        var lookAt = Vector3Utility.FromString(options.CameraLookAt);
+        var vertical = Vector3Utility.FromString(options.CameraVertical);
+
+        var w = (Origin - lookAt).Unit();
+        var u = Vector3.Cross(vertical, w).Unit();
+        var v = Vector3.Cross(w, u);
+
+        Horizontal = Vector3.Multiply(u, ViewportWidth);
+        Vertical = Vector3.Multiply(v, ViewportHeight);
+        LowerLeftCorner = Origin - Vector3.Divide(Horizontal, 2f) - Vector3.Divide(Vertical, 2f) - w;
     }
 
     public Ray GetRay(float u, float v)

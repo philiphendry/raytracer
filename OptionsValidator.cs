@@ -31,6 +31,23 @@ public static class OptionsValidator
             return "Disabling Lambertian has no effect whilst materials are enabled";
         }
 
+        var vectorRegex = new Regex(@"^(?<x>-?\d+(\.\d+)?),(?<y>-?\d+(\.\d+)?),(?<z>-?\d+(\.\d+)?)$");
+
+        if (!vectorRegex.IsMatch(options.CameraPosition))
+        {
+            return "The camera-position must be specified as three numbers separated by commas e.g. 1.0,2.0,-2.0.";
+        }
+
+        if (!vectorRegex.IsMatch(options.CameraLookAt))
+        {
+            return "The camera-look-at must be specified as three numbers separated by commas e.g. 1.0,2.0,-2.0.";
+        }
+
+        if (!vectorRegex.IsMatch(options.CameraVertical))
+        {
+            return "The camera-vertical must be specified as three numbers separated by commas e.g. 1.0,2.0,-2.0.";
+        }
+
         return null;
     }
 }

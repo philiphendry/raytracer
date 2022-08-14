@@ -19,3 +19,5 @@
 ![9 Render With Schlicks Reflectance](renderings/9-render-with-schlicks-reflectance.png)
 
 ![10 Render With A Field Of View](renderings/10-render-with-a-field-of-view.png)
+
+![11 Render With Cemera Positioned](renderings/11-render-with-cemera-positioned.png)

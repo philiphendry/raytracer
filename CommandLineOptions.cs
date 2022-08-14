@@ -52,4 +52,14 @@ public class CommandLineOptions
 
     [Option("field-of-view", Required = false, HelpText = "The vertical field of view in degrees.", Default = 60.0f)]
     public float VerticalFieldOfView { get; set; }
+
+    [Option("camera-position", Required = false, HelpText="A position for the camera", Default = "0.0,0.0,0.0")]
+    public string CameraPosition { get; set; }
+
+    [Option("camera-look-at", Required = false, HelpText = "A position for the camera to look at", Default = "0.0,0.0,-1.0")]
+    public string CameraLookAt { get; set; }
+
+    [Option("camera-vertical", Required = false, HelpText = "A vector for the camera vertical position", Default = "0.0,1.0,0.0")]
+    public string CameraVertical { get; set; }
+
 }
