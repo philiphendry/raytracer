@@ -11,3 +11,5 @@
 ![5 Render With Alternative Diffuser](renderings/5-render-with-alternative-diffuser.png)
 
 ![6 Render With Materials](renderings/6-render-with-materials.png)
+
+![7 Render With Metal Fuzziness](renderings/7-render-with-metal-fuzziness.png)
