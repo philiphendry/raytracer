@@ -32,6 +32,9 @@ public class Renderer
         IProgress<RenderProgress> progress,
         CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         var renderTasks = (
             from chunkX in Utility.ChunkedRange(_camera.ImageWidth, _chunkSize)
             from chunkY in Utility.ChunkedRange(_camera.ImageHeight, _chunkSize)
@@ -39,9 +42,15 @@ public class Renderer
         ).ToImmutableArray();
 
         _completedChunks = 0;
+        var parallelOptions = new ParallelOptions
+        {
+            CancellationToken = cancellationToken,
+            MaxDegreeOfParallelism = Environment.ProcessorCount
+        };
+
         await Parallel.ForEachAsync(
             renderTasks,
-            cancellationToken,
+            parallelOptions,
             async (chunk, ct) => await RenderChunkAsync(chunk.Item1, chunk.Item2, chunk.Item3, chunk.Item4, bitmap, renderTasks.Length, progress, ct));
     }
 
@@ -86,6 +95,10 @@ public class Renderer
         int endY,
         CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return null;
+
+        var startTime = DateTime.Now;
         var render = new List<(int, int, Vector3)>();
         for (var y = startY; y <= endY; y++)
         {
@@ -100,14 +113,19 @@ public class Renderer
                     rayColour += RayColour(ray, _worldObjects, _maxDepth);
                 }
                 render.Add((x, y, rayColour));
+
+                if (cancellationToken.IsCancellationRequested)
+                    return await Task.FromResult<List<(int, int, Vector3)>?>(null);
             }
 
-            await Task.Yield();
+            if ((DateTime.Now - startTime).TotalMilliseconds > 250)
+            {
+                await Task.Yield();
+                startTime = DateTime.Now;
+            }
 
-            if (cancellationToken.IsCancellationRequested)
-                return null;
         }
-        return render;
+        return await Task.FromResult(render);
     }
 
     public static Color VectorToColour(Vector3 vectorColour, int samplesPerPixel)

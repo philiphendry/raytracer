@@ -10,14 +10,15 @@ public class ManyBalls : ISceneGenerator
     {
         options.Width = 800;
         options.AspectRatio = "3:2";
-        options.Samples = 500;
-        options.MaxDepth = 50;
+        options.Samples = 100;
+        options.MaxDepth = 10;
         options.CameraPosition = "13,2,3";
         options.CameraLookAt = "0,0,0";
         options.CameraVertical = "0,1,0";
         options.Aperture = 0.1f;
         options.FocusDistance = 10.0f;
         options.VerticalFieldOfView = 20.0f;
+        options.ChunkSize = 20;
 
         var worldObjects = new List<IHittable>();
 
@@ -63,7 +64,6 @@ public class ManyBalls : ISceneGenerator
         worldObjects.Add(new Sphere(new Vector3(4.0f, 1.0f, 0.0f), 1.0f, material3));
 
         worldObjects.Add(new Sphere(new Vector3(0.0f, -1000.0f, 0.0f), 1000.0f, groundMaterial));
-
 
         return worldObjects.ToImmutableArray();
     }

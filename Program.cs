@@ -48,8 +48,18 @@ public static class Program
             // ReSharper restore AccessToDisposedClosure
         });
 
-        var cancellationTokenSource = new CancellationTokenSource();
-        await new Renderer(camera, worldObjects, options).RenderAsync(bitmap, progress, cancellationTokenSource.Token);
+        using var cancellationTokenSource = new CancellationTokenSource();
+        Console.CancelKeyPress += (_, _) =>
+        {
+            Console.WriteLine("Exiting...");
+            cancellationTokenSource.Cancel();
+        };
+
+        await new Renderer(camera, worldObjects, options)
+            .RenderAsync(bitmap, progress, cancellationTokenSource.Token);
+
+        if (cancellationTokenSource.IsCancellationRequested)
+            return;
 
         timer.Stop();
         Console.WriteLine($"Rendering took {timer.ElapsedMilliseconds}ms");
