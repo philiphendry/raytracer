@@ -2,7 +2,7 @@
   "profiles": {
     "RayTracer": {
       "commandName": "Project",
-      "commandLineArgs": "--viewoutput --saveoutput"
+      "commandLineArgs": "--viewoutput --saveoutput --width=800 --height=400 --use-lambertian"
     }
   }
 }

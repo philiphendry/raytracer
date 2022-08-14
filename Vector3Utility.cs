@@ -19,8 +19,8 @@ public static class Vector3Utility
         }
     }
 
-    public static Vector3 RandomUnitVector()
-    {
-        return RandomPointInAUnitSphere().Unit();
-    }
+    public static Vector3 RandomUnitVector() => RandomPointInAUnitSphere().Unit();
+
+    public static Vector3 RandomInHemisphere(Vector3 normal) 
+        => Vector3.Dot(RandomPointInAUnitSphere(), normal) > 0.0f ? RandomPointInAUnitSphere() : -RandomPointInAUnitSphere();
 }

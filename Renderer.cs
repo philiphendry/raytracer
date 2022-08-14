@@ -10,6 +10,7 @@ public class Renderer
     private readonly int _maxDepth;
     private readonly int _chunkSize;
     private readonly bool _normalMaterial;
+    private readonly bool _useLambertian;
 
     public Renderer(Camera camera, List<IHittable> worldObjects, CommandLineOptions options)
     {
@@ -19,6 +20,7 @@ public class Renderer
         _maxDepth = options.MaxDepth;
         _chunkSize = options.ChunkSize;
         _normalMaterial = options.NormalMaterial;
+        _useLambertian = options.UseLambertian;
     }
 
     public async Task RenderAsync(Bitmap bitmap, IProgress<RenderProgress> progress)
@@ -58,7 +60,6 @@ public class Renderer
                 break;
             }
         }
-
 
         foreach (var renderChunk in render.Result)
         {
@@ -127,7 +128,10 @@ public class Renderer
                     return Vector3.Multiply(new Vector3(hitPoint.Normal.X + 1.0f, hitPoint.Normal.Y + 1.0f, hitPoint.Normal.Z + 1.0f), 0.5f);
                 }
 
-                var target = hitPoint.Point + hitPoint.Normal + Vector3Utility.RandomUnitVector();
+                var target = _useLambertian
+                    ? hitPoint.Point + hitPoint.Normal + Vector3Utility.RandomUnitVector()
+                    : hitPoint.Point + Vector3Utility.RandomInHemisphere(hitPoint.Normal);
+
                 return 0.5f * RayColour(new Ray(hitPoint.Point, target - hitPoint.Point), objects, depth - 1);
             }
         }

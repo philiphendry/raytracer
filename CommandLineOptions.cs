@@ -17,7 +17,7 @@ public class CommandLineOptions
     [Option("width", Required = false, HelpText = "The width of the rendered image in pixels.", Default = 1920)]
     public int Width { get; set; }
 
-    [Option("height", Required = false, HelpText = "The height of the rendered image in pixels.")]
+    [Option("height", Required = false, HelpText = "The height of the rendered image in pixels.", Default = 1080)]
     public int Height { get; set; }
 
     [Option("aspectratio", Required = false, HelpText = "The aspect ratio of the rendered image expressed in the format n:m. Only provide width or height as the dimension not provided will be calculated.")]
@@ -43,4 +43,7 @@ public class CommandLineOptions
 
     [Option("normal-material", Required = false, HelpText = "Replaces all materials with a representation of the normal.")]
     public bool NormalMaterial { get; set; }
+
+    [Option("use-lambertian", Required = false, HelpText = "Use Lambertian distribution for calculating diffuse materials.")]
+    public bool UseLambertian { get; set; }
 }
