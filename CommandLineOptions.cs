@@ -24,6 +24,9 @@ public class CommandLineOptions
     [Option("render-built-in-scene", Required = false, HelpText = "Provide the name of a built-in scene.", Default = nameof(FirstScene))]
     public string? RenderSceneName { get; set; }
 
+    [Option("use-scene-settings", Required = false, HelpText = "Allows the built-in scene to supply its own settings overridding those given on the command-line.")]
+    public bool UseSceneSettings { get; set; }
+
     [Option("aspectratio", Required = false, HelpText = "The aspect ratio of the rendered image expressed in the format n:m. Only provide width or height as the dimension not provided will be calculated.")]
     public string? AspectRatio { get; set; }
 

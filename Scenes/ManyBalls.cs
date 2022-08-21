@@ -8,20 +8,23 @@ public class ManyBalls : ISceneGenerator
 {
     public IEnumerable<IHittable> Build(CommandLineOptions options)
     {
-        options.Width = 400;
-        //options.Height = 200;
-        options.AspectRatio = "3:2";
-        options.Samples = 20; //100;
-        options.MaxDepth = 5;
-        options.CameraPosition = "13,2,3";
-        options.CameraLookAt = "0,0,0";
-        options.CameraVertical = "0,1,0";
-        options.Aperture = 0.1f;
-        options.FocusDistance = 10.0f;
-        options.VerticalFieldOfView = 20.0f;
-        options.ChunkSize = 20;
-        options.DisableBvh = true;
-        options.EnabledHitCounts = false;
+        if (options.UseSceneSettings)
+        {
+            options.Width = 100;
+            options.Height = 100;
+            //options.AspectRatio = "3:2";
+            options.Samples = 1;
+            options.MaxDepth = 2;
+            options.CameraPosition = "13,2,3";
+            options.CameraLookAt = "0,0,0";
+            options.CameraVertical = "0,1,0";
+            options.Aperture = 0.1f;
+            options.FocusDistance = 10.0f;
+            options.VerticalFieldOfView = 20.0f;
+            options.ChunkSize = 20;
+            options.DisableBvh = false;
+            options.EnabledHitCounts = false;
+        }
 
         var worldObjects = new List<IHittable>();
 

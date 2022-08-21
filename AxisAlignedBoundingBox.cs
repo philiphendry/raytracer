@@ -53,4 +53,7 @@ public class AxisAlignedBoundingBox
 
         return true;
     }
+
+    public override string ToString() 
+        => $"({Minimum.X:n},{Minimum.Y:n},{Minimum.Z:n}) - ({Maximum.X:n},{Maximum.Y:n},{Maximum.Z:n})";
 }

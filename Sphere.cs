@@ -71,4 +71,6 @@ public class Sphere : IHittable
     }
 
     public long HitCount => _hitCount;
+
+    public override string ToString() => $"Origin={Origin}, Radius={Radius}, Bounding={BoundingBox()}";
 }

@@ -23,7 +23,7 @@ public class Renderer
         if (worldObjects == null) throw new ArgumentNullException(nameof(worldObjects));
         if (options == null) throw new ArgumentNullException(nameof(options));
 
-        _camera = camera;
+        _camera = camera ?? throw new ArgumentNullException(nameof(camera));
         _world = options.DisableBvh 
             ? new World(worldObjects, options) 
             : new World(new[] { new BoundedVolumeHierarchyNode(worldObjects, options) }.ToImmutableArray<IHittable>(), options);
