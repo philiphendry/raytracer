@@ -8,10 +8,11 @@ public class ManyBalls : ISceneGenerator
 {
     public IEnumerable<IHittable> Build(CommandLineOptions options)
     {
-        options.Width = 800;
+        options.Width = 400;
+        //options.Height = 200;
         options.AspectRatio = "3:2";
-        options.Samples = 100;
-        options.MaxDepth = 10;
+        options.Samples = 20; //100;
+        options.MaxDepth = 5;
         options.CameraPosition = "13,2,3";
         options.CameraLookAt = "0,0,0";
         options.CameraVertical = "0,1,0";
@@ -19,51 +20,58 @@ public class ManyBalls : ISceneGenerator
         options.FocusDistance = 10.0f;
         options.VerticalFieldOfView = 20.0f;
         options.ChunkSize = 20;
+        options.DisableBvh = true;
+        options.EnabledHitCounts = false;
 
         var worldObjects = new List<IHittable>();
 
-        var groundMaterial = new LambertianMaterial(new Vector3(0.5f, 0.5f, 0.5f));
+        var distributionSize = 11;
+        var ballsPerCell = 10;
 
-        for (var a = -11; a < 11; a++)
+        for (var a = -distributionSize; a < distributionSize; a++)
         {
-            for (var b = -11; b < 11; b++)
+            for (var b = -distributionSize; b < distributionSize; b++)
             {
-                var origin = new Vector3(a + 0.9f * Utility.Random(), 0.2f, b + 0.9f * Utility.Random());
-                if ((origin - new Vector3(4.0f, 0.2f, 0.0f)).Length() > 0.9f)
+                for (int i = 0; i < ballsPerCell; i++)
                 {
-                    var randomMaterial = Utility.Random();
-                    if (randomMaterial < 0.7)
+                    var origin = new Vector3(a + 0.9f * Utility.Random(), 0.2f, b + 0.9f * Utility.Random());
+                    if ((origin - new Vector3(4.0f, 0.2f, 0.0f)).Length() > 0.9f)
                     {
-                        var albedo = Vector3Utility.Random() * Vector3Utility.Random();
-                        var material = new LambertianMaterial(albedo);
-                        worldObjects.Add(new Sphere(origin, 0.2f, material));
-                    } 
-                    else if (randomMaterial < 0.9)
-                    {
-                        var albedo = Vector3Utility.Random(0.5f, 1.0f);
-                        var fuzz = Utility.Random(0.0f, 0.5f);
-                        var material = new MetalMaterial(albedo, fuzz);
-                        worldObjects.Add(new Sphere(origin, 0.2f, material));
-                    }
-                    else
-                    {
-                        var material = new DielectricMaterial(1.5f);
-                        worldObjects.Add(new Sphere(origin, 0.2f, material));
+                        var randomMaterial = Utility.Random();
+                        if (randomMaterial < 0.7)
+                        {
+                            var albedo = Vector3Utility.Random() * Vector3Utility.Random();
+                            var material = new LambertianMaterial(albedo);
+                            worldObjects.Add(new Sphere(origin, 0.2f, material, enableHitCounts: options.EnabledHitCounts));
+                        } 
+                        else if (randomMaterial < 0.9)
+                        {
+                            var albedo = Vector3Utility.Random(0.5f, 1.0f);
+                            var fuzz = Utility.Random(0.0f, 0.5f);
+                            var material = new MetalMaterial(albedo, fuzz);
+                            worldObjects.Add(new Sphere(origin, 0.2f, material, enableHitCounts: options.EnabledHitCounts));
+                        }
+                        else
+                        {
+                            var material = new DielectricMaterial(1.5f);
+                            worldObjects.Add(new Sphere(origin, 0.2f, material, enableHitCounts: options.EnabledHitCounts));
+                        }
                     }
                 }
             }
         }
 
         var material1 = new DielectricMaterial(1.5f);
-        worldObjects.Add(new Sphere(new Vector3(0.0f, 1.0f, 0.0f), 1.0f, material1));
+        worldObjects.Add(new Sphere(new Vector3(0.0f, 1.0f, 0.0f), 1.0f, material1, enableHitCounts: options.EnabledHitCounts));
 
         var material2 = new LambertianMaterial(new Vector3(0.4f, 0.2f, 0.1f));
-        worldObjects.Add(new Sphere(new Vector3(-4.0f, 1.0f, 0.0f), 1.0f, material2));
+        worldObjects.Add(new Sphere(new Vector3(-4.0f, 1.0f, 0.0f), 1.0f, material2, enableHitCounts: options.EnabledHitCounts));
 
         var material3 = new MetalMaterial(new Vector3(0.7f, 0.6f, 0.5f), 0.0f);
-        worldObjects.Add(new Sphere(new Vector3(4.0f, 1.0f, 0.0f), 1.0f, material3));
+        worldObjects.Add(new Sphere(new Vector3(4.0f, 1.0f, 0.0f), 1.0f, material3, enableHitCounts: options.EnabledHitCounts));
 
-        worldObjects.Add(new Sphere(new Vector3(0.0f, -1000.0f, 0.0f), 1000.0f, groundMaterial));
+        var groundMaterial = new LambertianMaterial(new Vector3(0.5f, 0.5f, 0.5f));
+        worldObjects.Add(new Sphere(new Vector3(0.0f, -1000.0f, 0.0f), 1000.0f, groundMaterial, enableHitCounts: options.EnabledHitCounts));
 
         return worldObjects.ToImmutableArray();
     }

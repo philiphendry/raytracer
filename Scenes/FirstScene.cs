@@ -21,10 +21,10 @@ public class FirstScene : ISceneGenerator
 
         IEnumerable<IHittable> worldObjects = new List<IHittable>
         {
-            new Sphere(new Vector3(0.0f, 0.0f, -1.0f), 0.5f, materialCenter),
-            new Sphere(new Vector3(-1.0f, 0.0f, -1.0f), 0.5f, materialLeft),
-            new Sphere(new Vector3(1.0f, 0.0f, -1.0f), 0.5f, materialRight),
-            new Sphere(new Vector3(0.0f, -100.5f, -1.0f), 100.0f, materialGround)
+            new Sphere(new Vector3(0.0f, 0.0f, -1.0f), 0.5f, materialCenter, enableHitCounts: options.EnabledHitCounts),
+            new Sphere(new Vector3(-1.0f, 0.0f, -1.0f), 0.5f, materialLeft, enableHitCounts: options.EnabledHitCounts),
+            new Sphere(new Vector3(1.0f, 0.0f, -1.0f), 0.5f, materialRight, enableHitCounts: options.EnabledHitCounts),
+            new Sphere(new Vector3(0.0f, -100.5f, -1.0f), 100.0f, materialGround, enableHitCounts: options.EnabledHitCounts)
         };
 
         return worldObjects;

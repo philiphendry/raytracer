@@ -35,7 +35,7 @@ public class DielectricMaterial : MaterialBase
     private float Reflectance(float cosine)
     {
         var r0 = (1 - _indexOfRefraction) / (1 + _indexOfRefraction);
-        r0 = r0 * r0;
+        r0 *= r0;
         return r0 + (1 - r0) * (float)Math.Pow(1 - cosine, 5.0f);
     }
 }

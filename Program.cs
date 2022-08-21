@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using CommandLine;
 using CommandLine.Text;
@@ -55,7 +56,7 @@ public static class Program
             cancellationTokenSource.Cancel();
         };
 
-        await new Renderer(camera, worldObjects, options)
+        await new Renderer(camera, worldObjects.ToImmutableArray(), options)
             .RenderAsync(bitmap, progress, cancellationTokenSource.Token);
 
         if (cancellationTokenSource.IsCancellationRequested)

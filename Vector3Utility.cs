@@ -43,7 +43,7 @@ public static class Vector3Utility
 
     public static Vector3 FromString(string? vector)
     {
-        var matches = VectorRegex.Match(vector);
+        var matches = VectorRegex.Match(vector!);
         return new Vector3(float.Parse(matches.Groups["x"].Value), float.Parse(matches.Groups["y"].Value), float.Parse(matches.Groups["z"].Value));
     }
 

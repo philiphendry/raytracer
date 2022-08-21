@@ -39,6 +39,15 @@ public class CommandLineOptions
     [Option("samples", Required = false, HelpText = "The number of samples taken for each pixel to anti-alias the final output.", Default = 20)]
     public int Samples { get; set; }
 
+    [Option("parallelism", Required = false, HelpText = "The maximum degree of parallelism. The default of 0 causes all CPU logical cores to be used. Any value over the number of logical cores is ignored and the default used instead.", Default = 0)]
+    public int Parallelism { get; set; }
+
+    [Option("disablebvh", Required = false, HelpText = "Disables the Bounded Volume Hierarchy functionality that makes ray path tracing more efficient.")]
+    public bool DisableBvh { get; set; }
+
+    [Option("EnabledHitCounts", Required = false, HelpText = "Enables counting of ray hits and outputs the results. For debugging purposes only has there is a performance impact.")]
+    public bool EnabledHitCounts { get; set; }
+
     [Option("maxdepth", Required = false, HelpText = "The maximum depth to trace rays.", Default = 10)]
     public int MaxDepth { get; set; }
 
