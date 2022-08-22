@@ -180,7 +180,7 @@ public class Renderer
             return new Vector3(0.0f, 0.0f, 0.0f);
 
         var hitPoint = world.Hit(ray, 0.001f, float.PositiveInfinity);
-        if (hitPoint == null)
+        if (!hitPoint.HasValue)
         {
             // We didn't hit an object in the world so calculate a graded background colour
 
@@ -196,12 +196,12 @@ public class Renderer
         {
             // Because we have a unit normal we can convert to a colour
             return Vector3.Multiply(
-                new Vector3(hitPoint.Normal.X + 1.0f, hitPoint.Normal.Y + 1.0f, hitPoint.Normal.Z + 1.0f), 0.5f);
+                new Vector3(hitPoint.Value.Normal.X + 1.0f, hitPoint.Value.Normal.Y + 1.0f, hitPoint.Value.Normal.Z + 1.0f), 0.5f);
         }
 
         if (!_disableMaterials)
         {
-            var scatterResult = hitPoint.Material.Scatter(ray, hitPoint);
+            var scatterResult = hitPoint.Value.Material.Scatter(ray, hitPoint.Value);
             return scatterResult == null
                 ? new Vector3(0.0f, 0.0f, 0.0f)
                 : scatterResult.Value.attenuation *
@@ -209,10 +209,10 @@ public class Renderer
         }
 
         var target = _disableLambertian
-            ? hitPoint.Point + Vector3Utility.RandomInHemisphere(hitPoint.Normal)
-            : hitPoint.Point + hitPoint.Normal + Vector3Utility.RandomUnitVector();
+            ? hitPoint.Value.Point + Vector3Utility.RandomInHemisphere(hitPoint.Value.Normal)
+            : hitPoint.Value.Point + hitPoint.Value.Normal + Vector3Utility.RandomUnitVector();
 
-        return 0.5f * RayColour(new Ray(hitPoint.Point, target - hitPoint.Point), world, depth - 1);
+        return 0.5f * RayColour(new Ray(hitPoint.Value.Point, target - hitPoint.Value.Point), world, depth - 1);
     }
 
     private static void CollectHitCounts(IHittable hittable, Dictionary<string, long> hitCounts)

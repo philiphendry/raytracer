@@ -3,7 +3,7 @@ using RayTracer.Materials;
 
 namespace RayTracer;
 
-public class HitPoint
+public struct HitPoint
 {
     public IMaterial Material { get; }
     public Vector3 Point { get; }

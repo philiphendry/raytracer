@@ -29,10 +29,10 @@ public class World : IHittable
         foreach (var worldObject in _worldObjects)
         {
             var nextHitPoint = worldObject.Hit(ray, tMin, closestT);
-            if (nextHitPoint != null)
+            if (nextHitPoint.HasValue)
             {
                 hitPoint = nextHitPoint;
-                closestT = nextHitPoint.T;
+                closestT = nextHitPoint.Value.T;
             }
         }
 
