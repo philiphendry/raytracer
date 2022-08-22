@@ -13,11 +13,8 @@ public class BoundedVolumeHierarchyNode : IHittable
     public BoundedVolumeHierarchyNode(ImmutableArray<IHittable> objects, CommandLineOptions options)
     {
         _enabledHitCounts = options.EnabledHitCounts;
-        var randomAxis = (int)Utility.Random(0, 2);
+        var randomAxis = Utility.Random(0, 2);
         
-        int Comparator(IHittable a, IHittable b) 
-            => a.BoundingBox()!.Minimum.GetAxisByIndex(randomAxis) < b.BoundingBox()!.Minimum.GetAxisByIndex(randomAxis) ? -1 : 1;
-
         switch (objects.Length)
         {
             case 1:
@@ -25,7 +22,7 @@ public class BoundedVolumeHierarchyNode : IHittable
                 _hittableRight = null;
                 break;
             case 2:
-                if (Comparator(objects[0], objects[1]) < 0)
+                if (objects[0].BoundingBox()!.Minimum.GetAxisByIndex(randomAxis) < objects[1].BoundingBox()!.Minimum.GetAxisByIndex(randomAxis))
                 {
                     _hittableLeft = objects[0];
                     _hittableRight = objects[1];
@@ -37,7 +34,7 @@ public class BoundedVolumeHierarchyNode : IHittable
                 }
                 break;
             default:
-                var sortedObjects = objects.ToImmutableArray().Sort(Comparator).ToArray();
+                var sortedObjects = objects.OrderBy(i => i.BoundingBox()!.Minimum.GetAxisByIndex(randomAxis)).ToArray();
                 var midPointIndex = sortedObjects.Length / 2;
                 _hittableLeft = new BoundedVolumeHierarchyNode(sortedObjects.Take(midPointIndex).ToImmutableArray(), options);
                 _hittableRight = new BoundedVolumeHierarchyNode(sortedObjects.Skip(midPointIndex).Take(sortedObjects.Length - midPointIndex).ToImmutableArray(), options);
@@ -63,16 +60,21 @@ public class BoundedVolumeHierarchyNode : IHittable
 
         var hitPointLeft = _hittableLeft.Hit(ray, tMin, tMax);
 
-        // Only find hits for values of T closer than any match from the left set
-        var hitPointRight = _hittableRight?.Hit(ray, tMin, hitPointLeft?.T ?? tMax);
-
-        // If the right hit point isn't null then it was closer than the left
-        return hitPointRight ?? hitPointLeft;
+        // Only find hits for values of T closer than any match from the left set.
+        // If the right hit point isn't null then it was closer than the left set.
+        return _hittableRight?.Hit(ray, tMin, hitPointLeft?.T ?? tMax) ?? hitPointLeft;
     }
 
     public AxisAlignedBoundingBox BoundingBox() => _boundingBox;
     
     public long HitCount => _hitCount;
+
+    public void DisplayHitCounts(int depth = 0)
+    {
+        Console.WriteLine($"{new string(' ', depth * 2)}BVH : {_hitCount:n0} {_boundingBox}");
+        _hittableLeft.DisplayHitCounts(depth + 1);
+        _hittableRight?.DisplayHitCounts(depth + 1);
+    }
 
     public override string ToString() 
         => $"{_boundingBox}{(_enabledHitCounts && _hitCount > 0 ? $", HitCount={_hitCount:n0}" : string.Empty)}";

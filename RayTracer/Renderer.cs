@@ -76,6 +76,8 @@ public class Renderer
             {
                 Console.WriteLine($"{hitCount.Key} => {hitCount.Value:n0} hits");
             }
+
+            _world.DisplayHitCounts();
         }
     }
 
@@ -213,7 +215,7 @@ public class Renderer
         return 0.5f * RayColour(new Ray(hitPoint.Point, target - hitPoint.Point), world, depth - 1);
     }
 
-    private void CollectHitCounts(IHittable hittable, Dictionary<string, long> hitCounts)
+    private static void CollectHitCounts(IHittable hittable, Dictionary<string, long> hitCounts)
     {
         var name = hittable.GetType().Name;
         if (hitCounts.ContainsKey(name))
@@ -228,7 +230,10 @@ public class Renderer
         if (hittable is BoundedVolumeHierarchyNode boundedBox)
         {
             CollectHitCounts(boundedBox.HittableLeft, hitCounts);
-            CollectHitCounts(boundedBox.HittableRight, hitCounts);
+            if (boundedBox.HittableRight != null)
+            {
+                CollectHitCounts(boundedBox.HittableRight, hitCounts);
+            }
         }
         else if (hittable is World world)
         {

@@ -7,7 +7,15 @@ public static class Utility
 {
     public static float Random() => (float)System.Random.Shared.NextDouble();
 
-    public static float Random(float min, float max) => min + (max - min) * (float)new Random().NextDouble();
+    public static float Random(float min, float max) => min + (max - min) * Random();
+
+    /// <summary>
+    /// A random integer greater than or equal to min and less than or equal to max.
+    /// </summary>
+    /// <param name="min"></param>
+    /// <param name="max"></param>
+    /// <returns></returns>
+    public static int Random(int min, int max) => System.Random.Shared.Next(min, max + 1);
 
     public static float DegreesToRadians(float degrees) => degrees * Constants.PI / 180.0f;
 

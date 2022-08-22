@@ -7,4 +7,6 @@ public interface IHittable
     AxisAlignedBoundingBox? BoundingBox();
 
     public long HitCount { get; }
+
+    void DisplayHitCounts(int depth = 0);
 }

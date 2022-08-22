@@ -11,7 +11,8 @@ public class Sphere : IHittable
     public float Radius { get; }
     public IMaterial Material { get; }
 
-    public int _hitCount;
+    private int _hitCount;
+    private readonly AxisAlignedBoundingBox _boundingBox;
 
     public Sphere(Vector3 origin, float radius, IMaterial material, bool enableHitCounts)
     {
@@ -19,6 +20,9 @@ public class Sphere : IHittable
         Origin = origin;
         Radius = radius;
         Material = material;
+
+        var boundingBoxCornerOffsetFromOrigin = new Vector3(Radius, Radius, Radius);
+        _boundingBox = new AxisAlignedBoundingBox(Origin - boundingBoxCornerOffsetFromOrigin, Origin + boundingBoxCornerOffsetFromOrigin);
     }
 
     public HitPoint? Hit(Ray ray, float tMin, float tMax)
@@ -61,16 +65,14 @@ public class Sphere : IHittable
                 return null;
         }
 
-        return new HitPoint(ray, root, (ray.PositionAt(root) - Origin) / Radius, Material);
+        return new HitPoint(ray, root, ((ray.PositionAt(root) - Origin) / Radius).Unit(), Material);
     }
 
-    public AxisAlignedBoundingBox BoundingBox(/*float time0, float time1*/)
-    {
-        var boundingBoxCornerOffsetFromOrigin = new Vector3(Radius, Radius, Radius);
-        return new AxisAlignedBoundingBox(Origin - boundingBoxCornerOffsetFromOrigin, Origin + boundingBoxCornerOffsetFromOrigin);
-    }
+    public AxisAlignedBoundingBox BoundingBox(/*float time0, float time1*/) => _boundingBox;
 
     public long HitCount => _hitCount;
 
-    public override string ToString() => $"Origin={Origin}, Radius={Radius}, Bounding={BoundingBox()}";
+    public void DisplayHitCounts(int depth) => Console.WriteLine($"{new string(' ', depth * 2)}{nameof(Sphere)} : {_hitCount:n0}");
+
+    public override string ToString() => $"Origin={Origin}, Radius={Radius:n2}, Bounding={BoundingBox()}";
 }

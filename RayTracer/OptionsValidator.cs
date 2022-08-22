@@ -11,6 +11,11 @@ public static class OptionsValidator
             return "When specifying aspectratio only provide either width or height.";
         }
 
+        if (options.Height == 0 && string.IsNullOrEmpty(options.AspectRatio))
+        {
+            options.Height = 1080;
+        }
+
         if (options.ViewOutput && !options.SaveOutput)
         {
             return "When specifying viewoutput you must also provide saveoutput.";

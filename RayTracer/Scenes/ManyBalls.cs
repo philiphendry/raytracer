@@ -10,11 +10,10 @@ public class ManyBalls : ISceneGenerator
     {
         if (options.UseSceneSettings)
         {
-            options.Width = 100;
-            options.Height = 100;
-            //options.AspectRatio = "3:2";
-            options.Samples = 1;
-            options.MaxDepth = 2;
+            options.Width = 800;
+            options.AspectRatio = "3:2";
+            options.Samples = 50;
+            options.MaxDepth = 5;
             options.CameraPosition = "13,2,3";
             options.CameraLookAt = "0,0,0";
             options.CameraVertical = "0,1,0";
@@ -23,13 +22,13 @@ public class ManyBalls : ISceneGenerator
             options.VerticalFieldOfView = 20.0f;
             options.ChunkSize = 20;
             options.DisableBvh = false;
-            options.EnabledHitCounts = false;
+            options.EnabledHitCounts = true;
         }
 
         var worldObjects = new List<IHittable>();
 
         var distributionSize = 11;
-        var ballsPerCell = 10;
+        var ballsPerCell = 1;
 
         for (var a = -distributionSize; a < distributionSize; a++)
         {

@@ -32,11 +32,15 @@ public class AxisAlignedBoundingBox
     {
         for (var axisIndex = 0; axisIndex < 3; axisIndex++)
         {
-            //var interval1 = (Minimum.GetAxisByIndex(axisIndex) - ray.Origin.GetAxisByIndex(axisIndex)) / ray.Direction.GetAxisByIndex(axisIndex);
-            //var interval2 = (Maximum.GetAxisByIndex(axisIndex) - ray.Origin.GetAxisByIndex(axisIndex)) / ray.Direction.GetAxisByIndex(axisIndex);
-            //var min = Math.Max(Math.Min(interval1, interval2), tMin);
-            //var max = Math.Min(Math.Max(interval1, interval2), tMax);
-            //if (max <= min)
+            //var t0 = Math.Min(
+            //    (Minimum.GetAxisByIndex(axisIndex) - ray.Origin.GetAxisByIndex(axisIndex)) / ray.Direction.GetAxisByIndex(axisIndex),
+            //    (Maximum.GetAxisByIndex(axisIndex) - ray.Origin.GetAxisByIndex(axisIndex)) / ray.Direction.GetAxisByIndex(axisIndex));
+            //var t1 = Math.Max(
+            //    (Minimum.GetAxisByIndex(axisIndex) - ray.Origin.GetAxisByIndex(axisIndex)) / ray.Direction.GetAxisByIndex(axisIndex),
+            //    (Maximum.GetAxisByIndex(axisIndex) - ray.Origin.GetAxisByIndex(axisIndex)) / ray.Direction.GetAxisByIndex(axisIndex));
+            //tMin = Math.Max(t0, tMin);
+            //tMax = Math.Min(t1, tMax);
+            //if (tMax <= tMin)
             //    return false;
 
             var inverseDirection = 1.0f / ray.Direction.GetAxisByIndex(axisIndex);
@@ -45,9 +49,9 @@ public class AxisAlignedBoundingBox
             if (inverseDirection < 0.0f)
                 (t0, t1) = (t1, t0);
 
-            var min = t0 > tMin ? t0 : tMin;
-            var max = t1 < tMax ? t1 : tMax;
-            if (max <= min)
+            tMin = t0 > tMin ? t0 : tMin;
+            tMax = t1 < tMax ? t1 : tMax;
+            if (tMax <= tMin)
                 return false;
         }
 

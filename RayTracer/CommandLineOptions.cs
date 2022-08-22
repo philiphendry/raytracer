@@ -18,7 +18,7 @@ public class CommandLineOptions
     [Option("width", Required = false, HelpText = "The width of the rendered image in pixels.", Default = 1920)]
     public int Width { get; set; }
 
-    [Option("height", Required = false, HelpText = "The height of the rendered image in pixels.", Default = 1080)]
+    [Option("height", Required = false, HelpText = "The height of the rendered image in pixels.")]
     public int Height { get; set; }
 
     [Option("render-built-in-scene", Required = false, HelpText = "Provide the name of a built-in scene.", Default = nameof(FirstScene))]
@@ -48,7 +48,7 @@ public class CommandLineOptions
     [Option("disablebvh", Required = false, HelpText = "Disables the Bounded Volume Hierarchy functionality that makes ray path tracing more efficient.")]
     public bool DisableBvh { get; set; }
 
-    [Option("EnabledHitCounts", Required = false, HelpText = "Enables counting of ray hits and outputs the results. For debugging purposes only has there is a performance impact.")]
+    [Option("enable-hit-counts", Required = false, HelpText = "Enables counting of ray hits and outputs the results. For debugging purposes only has there is a performance impact.")]
     public bool EnabledHitCounts { get; set; }
 
     [Option("maxdepth", Required = false, HelpText = "The maximum depth to trace rays.", Default = 10)]
