@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace RayTracer;
+namespace RayTracer.Objects;
 
 public class World : IHittable
 {

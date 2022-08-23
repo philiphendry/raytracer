@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using RayTracer.Utility;
+using RayTracer.Utilities;
 
 namespace RayTracer;
 
@@ -14,7 +14,7 @@ public class BoundedVolumeHierarchyNode : IHittable
     public BoundedVolumeHierarchyNode(ImmutableArray<IHittable> objects, CommandLineOptions options)
     {
         _enabledHitCounts = options.EnabledHitCounts;
-        var randomAxis = Utility.Utility.Random(0, 2);
+        var randomAxis = Utility.Random(0, 2);
         
         switch (objects.Length)
         {

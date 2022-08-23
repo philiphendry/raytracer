@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Drawing.Imaging;
 using CommandLine;
 using CommandLine.Text;
+using RayTracer.Utilities;
+using ProgressBar = ShellProgressBar.ProgressBar;
 
 namespace RayTracer;
 
@@ -32,14 +34,14 @@ public static class Program
 
     private static async Task RunAsync(CommandLineOptions options)
     {
-        var worldObjects = Utility.Utility.GetSceneGenerator(options.RenderSceneName)!.Build(options);
+        var worldObjects = Utility.GetSceneGenerator(options.RenderSceneName)!.Build(options);
         var camera = new Camera(options.Width, options);
         var bitmap = new Bitmap(camera.ImageWidth, camera.ImageHeight);
 
         var timer = new Stopwatch();
         timer.Start();
 
-        using var progressBar = new ShellProgressBar.ProgressBar(220, "Generating render chunks");
+        using var progressBar = new ProgressBar(220, "Generating render chunks");
         var progress = new Progress<RenderProgress>(progress =>
         {
             // ReSharper disable AccessToDisposedClosure

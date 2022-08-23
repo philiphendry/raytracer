@@ -2,6 +2,8 @@
 using System.Numerics;
 using RayTracer.Materials;
 using RayTracer.Objects;
+using RayTracer.Textures;
+using RayTracer.Utilities;
 
 namespace RayTracer.Scenes;
 
@@ -73,7 +75,7 @@ public class ManyBalls : ISceneGenerator
         var material3 = new MetalMaterial(new Vector3(0.7f, 0.6f, 0.5f), 0.0f);
         worldObjects.Add(new Sphere(new Vector3(4.0f, 1.0f, 0.0f), 1.0f, material3, enableHitCounts: options.EnabledHitCounts));
 
-        var groundMaterial = new LambertianMaterial(new Vector3(0.5f, 0.5f, 0.5f));
+        var groundMaterial = new LambertianMaterial(new CheckerTexture(new Vector3(0.2f, 0.3f, 0.1f), new Vector3(0.9f, 0.9f, 0.9f)));
         worldObjects.Add(new Sphere(new Vector3(0.0f, -1000.0f, 0.0f), 1000.0f, groundMaterial, enableHitCounts: options.EnabledHitCounts));
 
         return worldObjects.ToImmutableArray();
