@@ -6,7 +6,7 @@ public class MetalMaterial : MaterialBase
 {
     private readonly float _fuzziness;
 
-    public MetalMaterial(Vector3 albedo, float fuzziness) : base(albedo)
+    public MetalMaterial(Vector3 albedo, float fuzziness) : base(new SolidColour(albedo))
     {
         _fuzziness = fuzziness;
     }
@@ -16,7 +16,7 @@ public class MetalMaterial : MaterialBase
         var reflected = Vector3Utility.Reflect(ray.Direction.Unit(), hitPoint.Normal);
         var scatteredRay = new Ray(hitPoint.Point, reflected + _fuzziness * Vector3Utility.RandomPointInAUnitSphere());
         return Vector3.Dot(scatteredRay.Direction, hitPoint.Normal) > 0
-            ? (attenuation: Albedo, scatteredRay)
+            ? (attenuation: Texture.Value(hitPoint.U, hitPoint.V, hitPoint.Point), scatteredRay)
             : null;
     }
 }

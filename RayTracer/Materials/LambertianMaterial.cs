@@ -4,7 +4,7 @@ namespace RayTracer.Materials;
 
 public class LambertianMaterial : MaterialBase
 {
-    public LambertianMaterial(Vector3 albedo) : base(albedo)
+    public LambertianMaterial(Vector3 albedo) : base(new SolidColour(albedo))
     {
     }
 
@@ -15,6 +15,6 @@ public class LambertianMaterial : MaterialBase
         if (scatterDirection.NearZero())
             scatterDirection = hitPoint.Normal;
 
-        return (attenuation: Albedo, scatteredRay: new Ray(hitPoint.Point, scatterDirection));
+        return (attenuation: Texture.Value(hitPoint.U, hitPoint.V, hitPoint.Point), scatteredRay: new Ray(hitPoint.Point, scatterDirection));
     }
 }

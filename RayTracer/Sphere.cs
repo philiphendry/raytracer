@@ -65,10 +65,19 @@ public class Sphere : IHittable
                 return null;
         }
 
-        return new HitPoint(ray, root, ((ray.PositionAt(root) - Origin) / Radius).Unit(), Material);
+        var outwardNormal = (ray.PositionAt(root) - Origin) / Radius;
+        var tempUV = CalculateUV(outwardNormal);
+        return new HitPoint(ray, root, outwardNormal.Unit(), Material, tempUV.u, tempUV.v);
     }
 
     public AxisAlignedBoundingBox BoundingBox(/*float time0, float time1*/) => _boundingBox;
+
+    private (float u, float v) CalculateUV(Vector3 point)
+    {
+        var theta = (float)Math.Acos(-point.Y);
+        var phi = (float)Math.Atan2(-point.Z, point.X) + Constants.PI;
+        return (phi / (2 * Constants.PI), theta / Constants.PI);
+    }
 
     public long HitCount => _hitCount;
 

@@ -6,7 +6,7 @@ public class DielectricMaterial : MaterialBase
 {
     private readonly float _indexOfRefraction;
 
-    public DielectricMaterial(float indexOfRefraction) : base(new Vector3(1.0f, 1.0f, 1.0f))
+    public DielectricMaterial(float indexOfRefraction) : base(new SolidColour(new Vector3(1.0f, 1.0f, 1.0f)))
     {
         _indexOfRefraction = indexOfRefraction;
     }
@@ -24,7 +24,7 @@ public class DielectricMaterial : MaterialBase
                 ? Vector3.Reflect(unitDirection, hitPoint.Normal)
                 : Vector3Utility.Refract(unitDirection, hitPoint.Normal, refractionIndexRatio);
 
-        return (attenuation: Albedo, scatteredRay: new Ray(hitPoint.Point, refractedDirection));
+        return (attenuation: Texture.Value(hitPoint.U, hitPoint.V, hitPoint.Point), scatteredRay: new Ray(hitPoint.Point, refractedDirection));
     }
 
     /// <summary>

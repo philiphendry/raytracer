@@ -12,7 +12,7 @@ public class ManyBalls : ISceneGenerator
         {
             options.Width = 800;
             options.AspectRatio = "3:2";
-            options.Samples = 50;
+            options.Samples = 20;
             options.MaxDepth = 5;
             options.CameraPosition = "13,2,3";
             options.CameraLookAt = "0,0,0";

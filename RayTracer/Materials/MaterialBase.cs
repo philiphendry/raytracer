@@ -4,11 +4,11 @@ namespace RayTracer.Materials;
 
 public abstract class MaterialBase : IMaterial
 {
-    protected readonly Vector3 Albedo;
+    protected readonly Texture Texture;
 
-    protected MaterialBase(Vector3 albedo)
+    protected MaterialBase(Texture texture)
     {
-        Albedo = albedo;
+        Texture = texture;
     }
 
     public abstract (Vector3 attenuation, Ray scatteredRay)? Scatter(Ray ray, HitPoint hitPoint);
