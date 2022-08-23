@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using RayTracer.Scenes;
 
-namespace RayTracer;
+namespace RayTracer.Utility;
 
 public static class Utility
 {

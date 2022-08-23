@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using RayTracer.Textures;
+using System.Numerics;
 
 namespace RayTracer.Materials;
 

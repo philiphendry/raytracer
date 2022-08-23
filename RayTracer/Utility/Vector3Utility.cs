@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
 
-namespace RayTracer;
+namespace RayTracer.Utility;
 
 public static class Vector3Utility
 {

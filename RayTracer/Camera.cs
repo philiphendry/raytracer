@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using RayTracer.Utility;
 
 namespace RayTracer;
 
@@ -27,7 +28,7 @@ public class Camera
         var aspectRatio = options.GetAspectRatio();
         _aspectRatio = aspectRatio.Item1 / aspectRatio.Item2;
 
-        var theta = Utility.DegreesToRadians(options.VerticalFieldOfView);
+        var theta = Utility.Utility.DegreesToRadians(options.VerticalFieldOfView);
         var h = (float)Math.Tan(theta / 2);
         _viewportHeight = 2.0f * h;
         _viewportWidth = _aspectRatio * _viewportHeight;

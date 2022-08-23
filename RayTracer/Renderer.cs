@@ -1,6 +1,8 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Numerics;
+using RayTracer.Objects;
+using RayTracer.Utility;
 
 namespace RayTracer;
 
@@ -51,8 +53,8 @@ public class Renderer
             return;
 
         var renderTasks = (
-            from chunkX in Utility.ChunkedRange(_camera.ImageWidth, _chunkSize)
-            from chunkY in Utility.ChunkedRange(_camera.ImageHeight, _chunkSize)
+            from chunkX in Utility.Utility.ChunkedRange(_camera.ImageWidth, _chunkSize)
+            from chunkY in Utility.Utility.ChunkedRange(_camera.ImageHeight, _chunkSize)
             select (chunkX.Item1, chunkY.Item1, chunkX.Item2, chunkY.Item2)
         ).ToImmutableArray();
 
@@ -135,8 +137,8 @@ public class Renderer
                 for (var s = 0; s < _samplesPerPixel; s++)
                 {
                     // The random value adds jitter to each sample
-                    var u = (x + Utility.Random()) / (_camera.ImageWidth - 1);
-                    var v = (y + Utility.Random()) / (_camera.ImageHeight - 1);
+                    var u = (x + Utility.Utility.Random()) / (_camera.ImageWidth - 1);
+                    var v = (y + Utility.Utility.Random()) / (_camera.ImageHeight - 1);
                     var ray = _camera.GetRay(u, v);
                     rayColour += RayColour(ray, _world, _maxDepth);
                 }

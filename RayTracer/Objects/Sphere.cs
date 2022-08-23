@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using RayTracer.Materials;
 
-namespace RayTracer;
+namespace RayTracer.Objects;
 
 public class Sphere : IHittable
 {

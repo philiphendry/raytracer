@@ -1,11 +1,6 @@
 ﻿using System.Numerics;
 
-namespace RayTracer;
-
-public abstract class Texture
-{
-    public abstract Vector3 Value(float u, float v, Vector3 p);
-}
+namespace RayTracer.Textures;
 
 public class SolidColour : Texture
 {
