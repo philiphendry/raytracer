@@ -15,4 +15,13 @@
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Textures\Images\checkerboard-squares-black-white.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Images\earthmap.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

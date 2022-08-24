@@ -15,7 +15,7 @@ public class ManyBalls : ISceneGenerator
         {
             options.Width = 800;
             options.AspectRatio = "3:2";
-            options.Samples = 20;
+            options.Samples = 40;
             options.MaxDepth = 5;
             options.CameraPosition = "13,2,3";
             options.CameraLookAt = "0,0,0";
@@ -69,10 +69,10 @@ public class ManyBalls : ISceneGenerator
         var material1 = new DielectricMaterial(1.5f);
         worldObjects.Add(new Sphere(new Vector3(0.0f, 1.0f, 0.0f), 1.0f, material1, enableHitCounts: options.EnabledHitCounts));
 
-        var material2 = new LambertianMaterial(new Vector3(0.4f, 0.2f, 0.1f));
+        var material2 = new MetalMaterial(new Vector3(0.7f, 0.6f, 0.5f), 0.0f);
         worldObjects.Add(new Sphere(new Vector3(-4.0f, 1.0f, 0.0f), 1.0f, material2, enableHitCounts: options.EnabledHitCounts));
 
-        var material3 = new MetalMaterial(new Vector3(0.7f, 0.6f, 0.5f), 0.0f);
+        var material3 = new LambertianMaterial(new ImageTexture(@"Textures\Images\earthmap.jpg"));
         worldObjects.Add(new Sphere(new Vector3(4.0f, 1.0f, 0.0f), 1.0f, material3, enableHitCounts: options.EnabledHitCounts));
 
         var groundMaterial = new LambertianMaterial(new CheckerTexture(new Vector3(0.2f, 0.3f, 0.1f), new Vector3(0.9f, 0.9f, 0.9f)));

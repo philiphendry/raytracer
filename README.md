@@ -26,4 +26,6 @@
 
 ![13 Render With Many Balls](renderings/13-render-with-many-balls.png)
 
-![14 Render With Checker Texture](renderings/render_2022-08-23T14-49-34.png)
+![14 Render With Checker Texture](renderings/14-render_2022-08-23T14-49-34.png)
+
+![15 Render With Image Texture](renderings/15-render_2022-08-24T15-18-39.png)

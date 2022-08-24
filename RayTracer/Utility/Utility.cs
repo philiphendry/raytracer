@@ -17,7 +17,7 @@ public static class Utility
     /// <returns></returns>
     public static int Random(int min, int max) => System.Random.Shared.Next(min, max + 1);
 
-    public static float DegreesToRadians(float degrees) => degrees * Constants.PI / 180.0f;
+    public static float DegreesToRadians(float degrees) => degrees * Constants.PiDividedBy180;
 
     /// <summary>
     /// Given a range of 1 to totalCount this function returns the range chunked into
