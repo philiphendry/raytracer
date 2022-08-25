@@ -34,7 +34,7 @@ public static class Program
 
     private static async Task RunAsync(CommandLineOptions options)
     {
-        var worldObjects = Utility.GetSceneGenerator(options.RenderSceneName)!.Build(options);
+        var world = Utility.GetSceneGenerator(options.RenderSceneName)!.Build(options);
         var camera = new Camera(options.Width, options);
         var bitmap = new Bitmap(camera.ImageWidth, camera.ImageHeight);
 
@@ -58,7 +58,7 @@ public static class Program
             cancellationTokenSource.Cancel();
         };
 
-        await new Renderer(camera, worldObjects.ToImmutableArray(), options)
+        await new Renderer(camera, world, options)
             .RenderAsync(bitmap, progress, cancellationTokenSource.Token);
 
         if (cancellationTokenSource.IsCancellationRequested)

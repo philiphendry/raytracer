@@ -9,7 +9,7 @@ namespace RayTracer.Scenes;
 
 public class ManyBalls : ISceneGenerator
 {
-    public IEnumerable<IHittable> Build(CommandLineOptions options)
+    public World Build(CommandLineOptions options)
     {
         if (options.UseSceneSettings)
         {
@@ -78,6 +78,8 @@ public class ManyBalls : ISceneGenerator
         var groundMaterial = new LambertianMaterial(new CheckerTexture(new Vector3(0.2f, 0.3f, 0.1f), new Vector3(0.9f, 0.9f, 0.9f)));
         worldObjects.Add(new Sphere(new Vector3(0.0f, -1000.0f, 0.0f), 1000.0f, groundMaterial, enableHitCounts: options.EnabledHitCounts));
 
-        return worldObjects.ToImmutableArray();
+        return options.DisableBvh
+            ? new World(worldObjects.ToImmutableArray(), new GraduatedBackground(), options)
+            : new World(new[] { new BoundedVolumeHierarchyNode(worldObjects.ToImmutableArray(), options) }.ToImmutableArray<IHittable>(), new GraduatedBackground(), options);
     }
 }

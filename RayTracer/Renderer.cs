@@ -19,16 +19,14 @@ public class Renderer
     private int _completedChunks;
     private readonly int _degreesOfParallelism;
     private readonly bool _enableHitCounts;
+    private readonly RayColourer _rayColourer;
 
-    public Renderer(Camera camera, ImmutableArray<IHittable> worldObjects, CommandLineOptions options)
+    public Renderer(Camera camera, World world, CommandLineOptions options)
     {
-        if (worldObjects == null) throw new ArgumentNullException(nameof(worldObjects));
         if (options == null) throw new ArgumentNullException(nameof(options));
 
         _camera = camera ?? throw new ArgumentNullException(nameof(camera));
-        _world = options.DisableBvh 
-            ? new World(worldObjects, options) 
-            : new World(new[] { new BoundedVolumeHierarchyNode(worldObjects, options) }.ToImmutableArray<IHittable>(), options);
+        _world = world ?? throw new ArgumentNullException(nameof(world));
         _samplesPerPixel = options.Samples;
         _maxDepth = options.MaxDepth;
         _chunkSize = options.ChunkSize;
@@ -41,6 +39,7 @@ public class Renderer
              options.Parallelism == 0 
                 ? Environment.ProcessorCount 
                 : Math.Min(Environment.ProcessorCount, options.Parallelism);
+        _rayColourer = new RayColourer(_normalMaterial, _disableMaterials, _disableLambertian);
         Console.WriteLine($"Set parallelism to {_degreesOfParallelism}{(options.DisableBvh ? " and BVH is disabled" : string.Empty)}");
     }
 
@@ -104,8 +103,7 @@ public class Renderer
             {
                 bitmap.SetPixel(
                     renderedPixel.Item1 - 1,
-                    _camera.ImageHeight - renderedPixel.Item2,
-                    VectorToColour(renderedPixel.Item3, _samplesPerPixel));
+                    _camera.ImageHeight - renderedPixel.Item2, renderedPixel.Item3.ToColour(_samplesPerPixel));
             }
         }
 
@@ -140,7 +138,7 @@ public class Renderer
                     var u = (x + Utility.Random()) / (_camera.ImageWidth - 1);
                     var v = (y + Utility.Random()) / (_camera.ImageHeight - 1);
                     var ray = _camera.GetRay(u, v);
-                    rayColour += RayColour(ray, _world, _maxDepth);
+                    rayColour += _rayColourer.RayColour(ray, _world, _maxDepth);
                 }
                 render.Add((x, y, rayColour));
 
@@ -156,65 +154,6 @@ public class Renderer
 
         }
         return await Task.FromResult(render);
-    }
-
-    public static Color VectorToColour(Vector3 vectorColour, int samplesPerPixel)
-    {
-        var scale = 1.0f / samplesPerPixel;
-
-        // Gamma correct with a factor of 2 which means raising colour to the power 1/gamma which in this case is the square root
-        var r = (float)Math.Sqrt(scale * vectorColour.X);
-        var g = (float)Math.Sqrt(scale * vectorColour.Y);
-        var b = (float)Math.Sqrt(scale * vectorColour.Z);
-
-        return Color.FromArgb(
-            (int)(Math.Clamp(r, 0.0f, 0.999f) * 256), 
-            (int)(Math.Clamp(g, 0.0f, 0.999f) * 256),
-            (int)(Math.Clamp(b, 0.0f, 0.999f) * 256));
-    }
-
-    public Vector3 RayColour(Ray ray, World world, int depth)
-    {
-        if (world == null) throw new ArgumentNullException(nameof(world));
-
-        // Reached max depth so don't collect any more light
-        if (depth <= 0)
-            return new Vector3(0.0f, 0.0f, 0.0f);
-
-        var hitPoint = world.Hit(ray, 0.001f, float.PositiveInfinity);
-        if (!hitPoint.HasValue)
-        {
-            // We didn't hit an object in the world so calculate a graded background colour
-
-            // t is in the range -1 to 1 so normalise between 0 to 1
-            var t = 0.5f * (ray.Direction.Unit().Y + 1.0f);
-
-            var white = new Vector3(1.0f, 1.0f, 1.0f);
-            var blue = new Vector3(0.5f, 0.7f, 1.0f);
-            return Vector3.Add(Vector3.Multiply(white, 1.0f - t), Vector3.Multiply(blue, t));
-        }
-
-        if (_normalMaterial)
-        {
-            // Because we have a unit normal we can convert to a colour
-            return Vector3.Multiply(
-                new Vector3(hitPoint.Value.Normal.X + 1.0f, hitPoint.Value.Normal.Y + 1.0f, hitPoint.Value.Normal.Z + 1.0f), 0.5f);
-        }
-
-        if (!_disableMaterials)
-        {
-            var scatterResult = hitPoint.Value.Material.Scatter(ray, hitPoint.Value);
-            return scatterResult == null
-                ? new Vector3(0.0f, 0.0f, 0.0f)
-                : scatterResult.Value.attenuation *
-                  RayColour(scatterResult.Value.scatteredRay, world, depth - 1);
-        }
-
-        var target = _disableLambertian
-            ? hitPoint.Value.Point + Vector3Utility.RandomInHemisphere(hitPoint.Value.Normal)
-            : hitPoint.Value.Point + hitPoint.Value.Normal + Vector3Utility.RandomUnitVector();
-
-        return 0.5f * RayColour(new Ray(hitPoint.Value.Point, target - hitPoint.Value.Point), world, depth - 1);
     }
 
     private static void CollectHitCounts(IHittable hittable, Dictionary<string, long> hitCounts)

@@ -1,11 +1,12 @@
-﻿using System.Numerics;
+﻿using System.Collections.Immutable;
+using System.Numerics;
 using RayTracer.Objects;
 
 namespace RayTracer.Scenes;
 
 public class BvhTest : ISceneGenerator
 {
-    public IEnumerable<IHittable> Build(CommandLineOptions options)
+    public World Build(CommandLineOptions options)
     {
         if (options.UseSceneSettings)
         {
@@ -24,7 +25,7 @@ public class BvhTest : ISceneGenerator
             options.EnabledHitCounts = true;
         }
 
-        var ballCount = 6000;
+        var ballCount = 60;
         var ballDiameter = 1f / ballCount;
         var ballRadius = ballDiameter / 2;
         var startX = ballDiameter * ballCount / -2f + ballRadius;
@@ -37,6 +38,8 @@ public class BvhTest : ISceneGenerator
             worldObjects.Add(sphere);
         }
 
-        return worldObjects;
+        return options.DisableBvh
+            ? new World(worldObjects.ToImmutableArray(), new GraduatedBackground(), options)
+            : new World(new[] { new BoundedVolumeHierarchyNode(worldObjects.ToImmutableArray(), options) }.ToImmutableArray<IHittable>(), new GraduatedBackground(), options);
     }
 }

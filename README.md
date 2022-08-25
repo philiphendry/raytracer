@@ -29,3 +29,5 @@
 ![14 Render With Checker Texture](renderings/14-render_2022-08-23T14-49-34.png)
 
 ![15 Render With Image Texture](renderings/15-render_2022-08-24T15-18-39.png)
+
+![16 Render 2022 08 16 25 T19 22 07](renderings/16-render_2022-08-16-25T19-22-07.png)

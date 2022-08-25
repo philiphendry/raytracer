@@ -5,13 +5,17 @@ namespace RayTracer.Objects;
 public class World : IHittable
 {
     private readonly ImmutableArray<IHittable> _worldObjects;
+    private readonly IBackground _background;
     private int _hitCount;
     private readonly bool _enabledHitCounts;
     private readonly AxisAlignedBoundingBox? _boundingBox;
 
-    public World(ImmutableArray<IHittable> worldObjects, CommandLineOptions options)
+    public World(ImmutableArray<IHittable> worldObjects, IBackground background, CommandLineOptions options)
     {
+        if (options == null) throw new ArgumentNullException(nameof(options));
+
         _worldObjects = worldObjects;
+        _background = background ?? throw new ArgumentNullException(nameof(background));
         _enabledHitCounts = options.EnabledHitCounts;
         _boundingBox = CalculateBoundingBox(worldObjects);
     }
@@ -44,6 +48,8 @@ public class World : IHittable
     /// </summary>
     /// <returns></returns>
     public AxisAlignedBoundingBox? BoundingBox() => _boundingBox;
+
+    public IBackground Background => _background;
 
     private static AxisAlignedBoundingBox? CalculateBoundingBox(ImmutableArray<IHittable> worldObjects)
     {

@@ -13,4 +13,6 @@ public abstract class MaterialBase : IMaterial
     }
 
     public abstract (Vector3 attenuation, Ray scatteredRay)? Scatter(Ray ray, HitPoint hitPoint);
+    
+    public virtual Vector3 Emitted(float u, float v, Vector3 point) => new(0.0f, 0.0f, 0.0f);
 }

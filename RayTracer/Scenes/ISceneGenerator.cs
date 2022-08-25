@@ -1,6 +1,8 @@
-﻿namespace RayTracer.Scenes;
+﻿using RayTracer.Objects;
+
+namespace RayTracer.Scenes;
 
 public interface ISceneGenerator
 {
-    IEnumerable<IHittable> Build(CommandLineOptions options);
+    World Build(CommandLineOptions options);
 }

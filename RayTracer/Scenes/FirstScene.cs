@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections.Immutable;
+using System.Numerics;
 using RayTracer.Materials;
 using RayTracer.Objects;
 
@@ -6,7 +7,7 @@ namespace RayTracer.Scenes;
 
 public class FirstScene : ISceneGenerator
 {
-    public IEnumerable<IHittable> Build(CommandLineOptions options)
+    public World Build(CommandLineOptions options)
     {
         if (options.UseSceneSettings)
         {
@@ -31,6 +32,8 @@ public class FirstScene : ISceneGenerator
             new Sphere(new Vector3(0.0f, -100.5f, -1.0f), 100.0f, materialGround, enableHitCounts: options.EnabledHitCounts)
         };
 
-        return worldObjects;
+        return options.DisableBvh
+            ? new World(worldObjects.ToImmutableArray(), new GraduatedBackground(), options)
+            : new World(new[] { new BoundedVolumeHierarchyNode(worldObjects.ToImmutableArray(), options) }.ToImmutableArray<IHittable>(), new GraduatedBackground(), options);
     }
 }
