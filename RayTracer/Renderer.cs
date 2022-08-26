@@ -88,7 +88,9 @@ public class Renderer
             {
                 bitmap.SetPixel(
                     renderedPixel.Item1 - 1,
-                    _camera.ImageHeight - renderedPixel.Item2, renderedPixel.Item3.ToColour(_samplesPerPixel));
+                    _camera.ImageHeight - renderedPixel.Item2,
+                    renderedPixel.Item3.ToColour(_samplesPerPixel)
+                );
             }
         }
 

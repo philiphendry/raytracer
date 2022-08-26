@@ -28,7 +28,7 @@ public class RotateY : IHittable
             {
                 for (var k = 0; k < 2; k++)
                 {
-                    var x = i * _boundingBox.Maximum.X + (1 - i) * _boundingBox.Minimum.X;
+                    var x = i * _boundingBox!.Maximum.X + (1 - i) * _boundingBox.Minimum.X;
                     var y = j * _boundingBox.Maximum.Y + (1 - j) * _boundingBox.Minimum.Y;
                     var z = k * _boundingBox.Maximum.Z + (1 - k) * _boundingBox.Minimum.Z;
 

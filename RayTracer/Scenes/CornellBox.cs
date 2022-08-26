@@ -11,8 +11,8 @@ public class CornellBox : ISceneGenerator
     {
         options.Width = 600;
         options.AspectRatio = "1:1";
-        options.Samples = 600;
-        options.MaxDepth = 20;
+        options.Samples = 50;
+        options.MaxDepth = 3;
         options.CameraPosition = "278,278,-800";
         options.CameraLookAt = "278,278,0";
         options.CameraVertical = "0,1,0";
@@ -26,11 +26,12 @@ public class CornellBox : ISceneGenerator
     {
         var worldObjects = new List<IHittable>();
 
+        var metalMaterial = new MetalMaterial(new Vector3(0.12f, 0.45f, 0.15f), 1.0f);
         var redMaterial = new LambertianMaterial(new Vector3(0.65f, 0.05f, 0.05f));
         var whiteMaterial = new LambertianMaterial(new Vector3(0.73f, 0.73f, 0.73f));
         var greenMaterial = new LambertianMaterial(new Vector3(0.12f, 0.45f, 0.15f));
         var glassMaterial = new DielectricMaterial(1.5f);
-        var lightMaterial = new DiffuseLightMaterial(new Vector3(15.0f, 15.0f, 15.0f));
+        var lightMaterial = new DiffuseLightMaterial(new Vector3(45.0f, 45.0f, 45.0f));
 
         worldObjects.Add(new YzRectangle(0.0f, 555.0f, 0.0f, 555.0f, 555.0f, greenMaterial)); // left wall
         worldObjects.Add(new YzRectangle(0.0f, 555.0f, 0.0f, 555.0f, 0.0f, redMaterial)); // right wall
@@ -39,7 +40,7 @@ public class CornellBox : ISceneGenerator
         worldObjects.Add(new XzRectangle(0.0f, 555.0f, 0.0f, 555.0f, 0.0f, whiteMaterial)); // floor
         worldObjects.Add(new XyRectangle(0.0f, 555.0f, 0.0f, 555.0f, 555.0f, whiteMaterial)); // back wall
 
-        IHittable box1 = new Box(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(165.0f, 330.0f, 165.0f), whiteMaterial);
+        IHittable box1 = new Box(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(165.0f, 330.0f, 165.0f), metalMaterial);
         box1 = new RotateY(box1, 15.0f);
         box1 = new Translate(box1, new Vector3(265.0f, 0.0f, 295.0f));
         worldObjects.Add(box1);
