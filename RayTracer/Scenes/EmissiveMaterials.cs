@@ -24,7 +24,7 @@ public class EmissiveMaterials : ISceneGenerator
             options.VerticalFieldOfView = 20.0f;
             options.ChunkSize = 20;
             options.DisableBvh = false;
-            options.EnabledHitCounts = true;
+            options.EnabledHitCounts = false;
 
         }
 
@@ -36,8 +36,8 @@ public class EmissiveMaterials : ISceneGenerator
         var groundMaterial = new LambertianMaterial(new CheckerTexture(new Vector3(0.2f, 0.3f, 0.1f), new Vector3(0.9f, 0.9f, 0.9f)));
         worldObjects.Add(new Sphere(new Vector3(0.0f, -1000.0f, 0.0f), 1000.0f, groundMaterial, enableHitCounts: options.EnabledHitCounts));
 
-        var diffuseLight = new DiffuseLightMaterial(new Vector3(4.0f, 4.0f, 4.0f));
-        worldObjects.Add(new XyRectangle(3.0f, 5.0f, 1.0f, 3.0f, -2.0f, diffuseLight));
+        var diffuseLight = new DiffuseLightMaterial(new Vector3(8.0f, 8.0f, 8.0f));
+        worldObjects.Add(new XyRectangle(3.0f, 5.0f, 1.0f, 3.0f, -2.0f, diffuseLight, options));
 
         return new World(worldObjects.ToImmutableArray(), new SolidBackground(new Vector3(0, 0, 0)), options);
     }

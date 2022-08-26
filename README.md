@@ -31,3 +31,5 @@
 ![15 Render With Image Texture](renderings/15-render_2022-08-24T15-18-39.png)
 
 ![16 Render 2022 08 16 25 T19 22 07](renderings/16-render_2022-08-16-25T19-22-07.png)
+
+![17 Render 2022 08 26 T13 39 29](renderings/17-render_2022-08-26T13-39-29.png)

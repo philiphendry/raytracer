@@ -6,13 +6,13 @@ namespace RayTracer;
 
 public class CommandLineOptions
 {
-    [Option("saveoutput", Required = false, HelpText = "Saves the rendered output to a file. The filename is automatically generated.")]
+    [Option("save", Required = false, HelpText = "Saves the rendered output to a file. The filename is automatically generated.")]
     public bool SaveOutput { get; set; }
 
-    [Option("viewinwindow", Required = false, HelpText = "Displays the rendered output in a window.")]
+    [Option("window", Required = false, HelpText = "Displays the rendered output in a window.")]
     public bool ViewInWindow { get; set; }
 
-    [Option("viewoutput", Required = false, HelpText = "Asks the operating system to display the rendered output with a default image viewer.")]
+    [Option("view", Required = false, HelpText = "Asks the operating system to display the rendered output with a default image viewer.")]
     public bool ViewOutput { get; set; }
 
     [Option("width", Required = false, HelpText = "The width of the rendered image in pixels.", Default = 1920)]
@@ -21,7 +21,7 @@ public class CommandLineOptions
     [Option("height", Required = false, HelpText = "The height of the rendered image in pixels.")]
     public int Height { get; set; }
 
-    [Option("render-built-in-scene", Required = false, HelpText = "Provide the name of a built-in scene.", Default = nameof(FirstScene))]
+    [Option("scene", Required = false, HelpText = "Provide the name of a built-in scene.", Default = nameof(FirstScene))]
     public string? RenderSceneName { get; set; }
 
     [Option("use-scene-settings", Required = false, HelpText = "Allows the built-in scene to supply its own settings overridding those given on the command-line.")]
