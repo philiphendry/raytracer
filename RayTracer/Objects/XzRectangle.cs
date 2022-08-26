@@ -11,6 +11,7 @@ public class XzRectangle : IHittable
     private readonly float _z1;
     private readonly float _k;
     private readonly IMaterial _material;
+    private readonly AxisAlignedBoundingBox _boundingBox;
 
     public XzRectangle(float x0, float x1, float z0, float z1, float k, IMaterial material)
     {
@@ -20,6 +21,7 @@ public class XzRectangle : IHittable
         _z1 = z1;
         _k = k;
         _material = material;
+        _boundingBox = new(new Vector3(_x0, _k - 0.0001f, _z0),new Vector3(_x1, _k + 0.0001f, _z1));
     }
 
     public HitPoint? Hit(Ray ray, float tMin, float tMax)
@@ -33,8 +35,14 @@ public class XzRectangle : IHittable
         if (x < _x0 || x > _x1 || z < _z0 || z > _z1)
             return null;
 
-        return new HitPoint(ray, t, Vector3.UnitZ, _material, (x - _x0) / (_x1 - _x0), (z - _z0) / (_z1 - _z0));
+        return new HitPoint(
+            ray, 
+            t, 
+            Vector3.UnitY, 
+            _material, 
+            u: (x - _x0) / (_x1 - _x0), 
+            v: (z - _z0) / (_z1 - _z0));
     }
 
-    public AxisAlignedBoundingBox BoundingBox() => new(new Vector3(_x0, _k - 0.0001f, _z0),new Vector3(_x1, _k + 0.0001f, _z1));
+    public AxisAlignedBoundingBox BoundingBox() => _boundingBox;
 }

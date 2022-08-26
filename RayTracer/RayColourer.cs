@@ -35,8 +35,11 @@ public class RayColourer
         {
             // Because we have a unit normal we can convert to a colour
             return Vector3.Multiply(
-                new Vector3(hitPoint.Value.Normal.X + 1.0f, hitPoint.Value.Normal.Y + 1.0f,
-                    hitPoint.Value.Normal.Z + 1.0f), 0.5f);
+                new Vector3(
+                    hitPoint.Value.Normal.X + 1.0f, 
+                    hitPoint.Value.Normal.Y + 1.0f,
+                    hitPoint.Value.Normal.Z + 1.0f), 
+                0.5f);
         }
 
         if (_disableMaterials)

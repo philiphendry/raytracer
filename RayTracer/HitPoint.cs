@@ -7,20 +7,26 @@ public struct HitPoint
 {
     public IMaterial Material { get; }
     public Vector3 Point { get; }
-    public Vector3 Normal { get; }
+    public Vector3 Normal { get; set; }
     public float T { get; }
-    public bool FrontFace { get; }
+    public bool IsFrontFace { get; set; }
     public float U { get; }
     public float V { get; }
 
-    public HitPoint(Ray ray, float t, Vector3 outwardNormal, IMaterial material, float u, float v)
+    public HitPoint(Ray ray, Vector3 point, float t, Vector3 outwardNormal, IMaterial material, float u, float v)
     {
-        Point = ray.PositionAt(t);
+        Point = point;
         T = t;
-        FrontFace = Vector3.Dot(ray.Direction, outwardNormal) < 0;
-        Normal = FrontFace ? outwardNormal : -outwardNormal;
         Material = material;
         U = u;
         V = v;
+        IsFrontFace = Vector3.Dot(ray.Direction, outwardNormal) < 0;
+        Normal = IsFrontFace ? outwardNormal : -outwardNormal;
+
+    }
+
+    public HitPoint(Ray ray, float t, Vector3 outwardNormal, IMaterial material, float u, float v) :
+        this(ray, ray.PositionAt(t), t, outwardNormal, material, u, v)
+    {
     }
 }

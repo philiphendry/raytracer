@@ -21,6 +21,9 @@ public class LambertianMaterial : MaterialBase
         if (scatterDirection.NearZero())
             scatterDirection = hitPoint.Normal;
 
-        return (attenuation: Texture.Value(hitPoint.U, hitPoint.V, hitPoint.Point), scatteredRay: new Ray(hitPoint.Point, scatterDirection));
+        return (
+            attenuation: Texture.Value(hitPoint.U, hitPoint.V, hitPoint.Point),
+            scatteredRay: new Ray(hitPoint.Point, scatterDirection)
+        );
     }
 }

@@ -15,7 +15,7 @@ public class DielectricMaterial : MaterialBase
 
     public override (Vector3 attenuation, Ray scatteredRay)? Scatter(Ray ray, HitPoint hitPoint)
     {
-        var refractionIndexRatio = hitPoint.FrontFace ? 1.0f / _indexOfRefraction : _indexOfRefraction;
+        var refractionIndexRatio = hitPoint.IsFrontFace ? 1.0f / _indexOfRefraction : _indexOfRefraction;
 
         var unitDirection = ray.Direction.Unit();
         var cosTheta = (float)Math.Min(Vector3.Dot(-unitDirection, hitPoint.Normal), 1.0);

@@ -33,3 +33,9 @@
 ![16 Render 2022 08 16 25 T19 22 07](renderings/16-render_2022-08-16-25T19-22-07.png)
 
 ![17 Render 2022 08 26 T13 39 29](renderings/17-render_2022-08-26T13-39-29.png)
+
+![18 Render 2022 08 26 T16 02 12](renderings/18-render_2022-08-26T16-02-12.png)
+
+![19 Render 2022 08 26 T16 04 13](renderings/19-render_2022-08-26T16-04-13.png)
+
+![20 Render 2022 08 26 T16 24 08](renderings/20-render_2022-08-26T16-24-08.png)
