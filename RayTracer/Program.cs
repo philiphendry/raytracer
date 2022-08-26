@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using CommandLine;
 using CommandLine.Text;
@@ -34,7 +33,13 @@ public static class Program
 
     private static async Task RunAsync(CommandLineOptions options)
     {
-        var world = Utility.GetSceneGenerator(options.RenderSceneName)!.Build(options);
+        var sceneGenerator = Utility.GetSceneGenerator(options.RenderSceneName);
+        var world = sceneGenerator!.Build();
+        if (options.UseSceneSettings)
+        {
+            sceneGenerator.ApplySceneSettings(options);
+        }
+
         var camera = new Camera(options.Width, options);
         var bitmap = new Bitmap(camera.ImageWidth, camera.ImageHeight);
 

@@ -18,7 +18,6 @@ public class Renderer
     private readonly bool _disableMaterials;
     private int _completedChunks;
     private readonly int _degreesOfParallelism;
-    private readonly bool _enableHitCounts;
     private readonly RayColourer _rayColourer;
 
     public Renderer(Camera camera, World world, CommandLineOptions options)
@@ -33,14 +32,12 @@ public class Renderer
         _normalMaterial = options.NormalMaterial;
         _disableLambertian = options.DisableLambertian;
         _disableMaterials = options.DisableMaterials;
-        _enableHitCounts = options.EnabledHitCounts;
         _degreesOfParallelism = 
              Debugger.IsAttached ? 1 : // Whilst debugging only use one thread which makes stepping through code easier!
              options.Parallelism == 0 
                 ? Environment.ProcessorCount 
                 : Math.Min(Environment.ProcessorCount, options.Parallelism);
         _rayColourer = new RayColourer(_normalMaterial, _disableMaterials, _disableLambertian);
-        Console.WriteLine($"Set parallelism to {_degreesOfParallelism}{(options.DisableBvh ? " and BVH is disabled" : string.Empty)}");
     }
 
     public async Task RenderAsync(
@@ -68,18 +65,6 @@ public class Renderer
             renderTasks,
             parallelOptions,
             async (chunk, ct) => await RenderChunkAsync(chunk.Item1, chunk.Item2, chunk.Item3, chunk.Item4, bitmap, renderTasks.Length, progress, ct));
-
-        if (_enableHitCounts)
-        {
-            Dictionary<string, long> hitCounts = new();
-            CollectHitCounts(_world, hitCounts);
-            foreach (var hitCount in hitCounts)
-            {
-                Console.WriteLine($"{hitCount.Key} => {hitCount.Value:n0} hits");
-            }
-
-            _world.DisplayHitCounts();
-        }
     }
 
     private async Task RenderChunkAsync(
@@ -154,34 +139,5 @@ public class Renderer
 
         }
         return await Task.FromResult(render);
-    }
-
-    private static void CollectHitCounts(IHittable hittable, Dictionary<string, long> hitCounts)
-    {
-        var name = hittable.GetType().Name;
-        if (hitCounts.ContainsKey(name))
-        {
-            hitCounts[name] += hittable.HitCount;
-        }
-        else
-        {
-            hitCounts[name] = hittable.HitCount;
-        }
-
-        if (hittable is BoundedVolumeHierarchyNode boundedBox)
-        {
-            CollectHitCounts(boundedBox.HittableLeft, hitCounts);
-            if (boundedBox.HittableRight != null)
-            {
-                CollectHitCounts(boundedBox.HittableRight, hitCounts);
-            }
-        }
-        else if (hittable is World world)
-        {
-            foreach (var worldObject in world.Objects)
-            {
-                CollectHitCounts(worldObject, hitCounts);
-            }
-        }
     }
 }

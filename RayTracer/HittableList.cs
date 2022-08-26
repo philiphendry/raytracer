@@ -1,24 +1,20 @@
-﻿namespace RayTracer;
+﻿using System.Collections.Immutable;
+
+namespace RayTracer;
 
 public class HittableList : IHittable
 {
     private readonly IEnumerable<IHittable> _hittables;
     private readonly AxisAlignedBoundingBox? _boundingBox;
-    private readonly bool _enableHitCounts;
-    private int _hitCount;
 
-    public HittableList(IEnumerable<IHittable> hittables, CommandLineOptions options)
+    public HittableList(IEnumerable<IHittable> hittables)
     {
-        _hittables = hittables;
-        _enableHitCounts = options.EnabledHitCounts;
+        _hittables = new[] { new BoundedVolumeHierarchyNode(hittables.ToImmutableArray()) }.ToImmutableArray<IHittable>();
         _boundingBox = CalculateBoundingBox();
     }
 
     public HitPoint? Hit(Ray ray, float tMin, float tMax)
     {
-        if (_enableHitCounts)
-            Interlocked.Increment(ref _hitCount);
-
         HitPoint? hitPoint = null;
         var closestT = tMax;
 
@@ -36,10 +32,6 @@ public class HittableList : IHittable
     }
 
     public AxisAlignedBoundingBox? BoundingBox() => _boundingBox;
-
-    public long HitCount => _hitCount;
-
-    public void DisplayHitCounts(int depth = 0) => Console.WriteLine($"{new string(' ', depth * 2)}{GetType().Name} : {_hitCount:n0}");
 
     private AxisAlignedBoundingBox? CalculateBoundingBox()
     {

@@ -8,12 +8,9 @@ public class BoundedVolumeHierarchyNode : IHittable
     private readonly IHittable _hittableLeft;
     private readonly IHittable? _hittableRight;
     private readonly AxisAlignedBoundingBox _boundingBox;
-    private int _hitCount;
-    private static bool _enabledHitCounts;
 
-    public BoundedVolumeHierarchyNode(ImmutableArray<IHittable> objects, CommandLineOptions options)
+    public BoundedVolumeHierarchyNode(ImmutableArray<IHittable> objects)
     {
-        _enabledHitCounts = options.EnabledHitCounts;
         var randomAxis = Utility.Random(0, 2);
         
         switch (objects.Length)
@@ -37,8 +34,8 @@ public class BoundedVolumeHierarchyNode : IHittable
             default:
                 var sortedObjects = objects.OrderBy(i => i.BoundingBox()!.Minimum.GetAxisByIndex(randomAxis)).ToArray();
                 var midPointIndex = sortedObjects.Length / 2;
-                _hittableLeft = new BoundedVolumeHierarchyNode(sortedObjects.Take(midPointIndex).ToImmutableArray(), options);
-                _hittableRight = new BoundedVolumeHierarchyNode(sortedObjects.Skip(midPointIndex).Take(sortedObjects.Length - midPointIndex).ToImmutableArray(), options);
+                _hittableLeft = new BoundedVolumeHierarchyNode(sortedObjects.Take(midPointIndex).ToImmutableArray());
+                _hittableRight = new BoundedVolumeHierarchyNode(sortedObjects.Skip(midPointIndex).Take(sortedObjects.Length - midPointIndex).ToImmutableArray());
                 break;
         }
 
@@ -47,15 +44,8 @@ public class BoundedVolumeHierarchyNode : IHittable
             : AxisAlignedBoundingBox.CreateSurrounding(_hittableLeft.BoundingBox()!, _hittableRight.BoundingBox()!))!;
     }
 
-    public IHittable HittableLeft => _hittableLeft;
-
-    public IHittable? HittableRight => _hittableRight;
-
     public HitPoint? Hit(Ray ray, float tMin, float tMax)
     {
-        if (_enabledHitCounts)
-            Interlocked.Increment(ref _hitCount);
-
         if (!_boundingBox.Hit(ray, tMin, tMax))
             return null;
 
@@ -67,17 +57,5 @@ public class BoundedVolumeHierarchyNode : IHittable
     }
 
     public AxisAlignedBoundingBox BoundingBox() => _boundingBox;
-    
-    public long HitCount => _hitCount;
-
-    public void DisplayHitCounts(int depth = 0)
-    {
-        Console.WriteLine($"{new string(' ', depth * 2)}BVH : {_hitCount:n0} {_boundingBox}");
-        _hittableLeft.DisplayHitCounts(depth + 1);
-        _hittableRight?.DisplayHitCounts(depth + 1);
-    }
-
-    public override string ToString() 
-        => $"{_boundingBox}{(_enabledHitCounts && _hitCount > 0 ? $", HitCount={_hitCount:n0}" : string.Empty)}";
 }
 

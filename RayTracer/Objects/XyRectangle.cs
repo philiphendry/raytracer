@@ -11,10 +11,8 @@ public class XyRectangle : IHittable
     private readonly float _y1;
     private readonly float _k;
     private readonly IMaterial _material;
-    private readonly bool _enableHitCounts;
-    private int _hitCount;
 
-    public XyRectangle(float x0, float x1, float y0, float y1, float k, IMaterial material, CommandLineOptions options)
+    public XyRectangle(float x0, float x1, float y0, float y1, float k, IMaterial material)
     {
         _x0 = x0;
         _x1 = x1;
@@ -22,14 +20,10 @@ public class XyRectangle : IHittable
         _y1 = y1;
         _k = k;
         _material = material;
-        _enableHitCounts = options.EnabledHitCounts;
     }
 
     public HitPoint? Hit(Ray ray, float tMin, float tMax)
     {
-        if (_enableHitCounts)
-            Interlocked.Increment(ref _hitCount);
-
         var t = (_k - ray.Origin.Z) / ray.Direction.Z;
         if (t < tMin || t > tMax)
             return null;
@@ -43,8 +37,4 @@ public class XyRectangle : IHittable
     }
 
     public AxisAlignedBoundingBox BoundingBox() => new(new Vector3(_x0, _y0, _k - 0.0001f),new Vector3(_x1, _y1, _k + 0.0001f));
-
-    public long HitCount => _hitCount;
-
-    public void DisplayHitCounts(int depth = 0) => Console.WriteLine($"{new string(' ', depth * 2)}{nameof(XyRectangle)} : {_hitCount:n0}");
 }

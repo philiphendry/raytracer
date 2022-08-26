@@ -4,5 +4,7 @@ namespace RayTracer.Scenes;
 
 public interface ISceneGenerator
 {
-    World Build(CommandLineOptions options);
+    World Build();
+
+    void ApplySceneSettings(CommandLineOptions options);
 }

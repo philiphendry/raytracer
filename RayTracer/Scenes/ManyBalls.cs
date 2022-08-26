@@ -9,25 +9,23 @@ namespace RayTracer.Scenes;
 
 public class ManyBalls : ISceneGenerator
 {
-    public World Build(CommandLineOptions options)
+    public void ApplySceneSettings(CommandLineOptions options)
     {
-        if (options.UseSceneSettings)
-        {
-            options.Width = 800;
-            options.AspectRatio = "3:2";
-            options.Samples = 40;
-            options.MaxDepth = 5;
-            options.CameraPosition = "13,2,3";
-            options.CameraLookAt = "0,0,0";
-            options.CameraVertical = "0,1,0";
-            options.Aperture = 0.1f;
-            options.FocusDistance = 10.0f;
-            options.VerticalFieldOfView = 20.0f;
-            options.ChunkSize = 20;
-            options.DisableBvh = false;
-            options.EnabledHitCounts = true;
-        }
+        options.Width = 800;
+        options.AspectRatio = "3:2";
+        options.Samples = 40;
+        options.MaxDepth = 5;
+        options.CameraPosition = "13,2,3";
+        options.CameraLookAt = "0,0,0";
+        options.CameraVertical = "0,1,0";
+        options.Aperture = 0.1f;
+        options.FocusDistance = 10.0f;
+        options.VerticalFieldOfView = 20.0f;
+        options.ChunkSize = 20;
+    }
 
+    public World Build()
+    {
         var worldObjects = new List<IHittable>();
 
         var distributionSize = 11;
@@ -47,19 +45,19 @@ public class ManyBalls : ISceneGenerator
                         {
                             var albedo = Vector3Utility.Random() * Vector3Utility.Random();
                             var material = new LambertianMaterial(albedo);
-                            worldObjects.Add(new Sphere(origin, 0.2f, material, enableHitCounts: options.EnabledHitCounts));
+                            worldObjects.Add(new Sphere(origin, 0.2f, material));
                         } 
                         else if (randomMaterial < 0.9)
                         {
                             var albedo = Vector3Utility.Random(0.5f, 1.0f);
                             var fuzz = Utility.Random(0.0f, 0.5f);
                             var material = new MetalMaterial(albedo, fuzz);
-                            worldObjects.Add(new Sphere(origin, 0.2f, material, enableHitCounts: options.EnabledHitCounts));
+                            worldObjects.Add(new Sphere(origin, 0.2f, material));
                         }
                         else
                         {
                             var material = new DielectricMaterial(1.5f);
-                            worldObjects.Add(new Sphere(origin, 0.2f, material, enableHitCounts: options.EnabledHitCounts));
+                            worldObjects.Add(new Sphere(origin, 0.2f, material));
                         }
                     }
                 }
@@ -67,19 +65,17 @@ public class ManyBalls : ISceneGenerator
         }
 
         var material1 = new DielectricMaterial(1.5f);
-        worldObjects.Add(new Sphere(new Vector3(0.0f, 1.0f, 0.0f), 1.0f, material1, enableHitCounts: options.EnabledHitCounts));
+        worldObjects.Add(new Sphere(new Vector3(0.0f, 1.0f, 0.0f), 1.0f, material1));
 
         var material2 = new MetalMaterial(new Vector3(0.7f, 0.6f, 0.5f), 0.0f);
-        worldObjects.Add(new Sphere(new Vector3(-4.0f, 1.0f, 0.0f), 1.0f, material2, enableHitCounts: options.EnabledHitCounts));
+        worldObjects.Add(new Sphere(new Vector3(-4.0f, 1.0f, 0.0f), 1.0f, material2));
 
         var material3 = new LambertianMaterial(new ImageTexture(@"Textures\Images\earthmap.jpg"));
-        worldObjects.Add(new Sphere(new Vector3(4.0f, 1.0f, 0.0f), 1.0f, material3, enableHitCounts: options.EnabledHitCounts));
+        worldObjects.Add(new Sphere(new Vector3(4.0f, 1.0f, 0.0f), 1.0f, material3));
 
         var groundMaterial = new LambertianMaterial(new CheckerTexture(new Vector3(0.2f, 0.3f, 0.1f), new Vector3(0.9f, 0.9f, 0.9f)));
-        worldObjects.Add(new Sphere(new Vector3(0.0f, -1000.0f, 0.0f), 1000.0f, groundMaterial, enableHitCounts: options.EnabledHitCounts));
+        worldObjects.Add(new Sphere(new Vector3(0.0f, -1000.0f, 0.0f), 1000.0f, groundMaterial));
 
-        return options.DisableBvh
-            ? new World(worldObjects.ToImmutableArray(), new GraduatedBackground(), options)
-            : new World(new[] { new BoundedVolumeHierarchyNode(worldObjects.ToImmutableArray(), options) }.ToImmutableArray<IHittable>(), new GraduatedBackground(), options);
+        return new World(worldObjects, new GraduatedBackground());
     }
 }

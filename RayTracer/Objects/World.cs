@@ -1,18 +1,11 @@
-﻿using System.Collections.Immutable;
-
-namespace RayTracer.Objects;
+﻿namespace RayTracer.Objects;
 
 public class World : HittableList
 {
-    public World(ImmutableArray<IHittable> worldObjects, IBackground background, CommandLineOptions options)
-        :base(worldObjects, options)
+    public World(IEnumerable<IHittable> worldObjects, IBackground background) : base(worldObjects)
     {
-        if (options == null) throw new ArgumentNullException(nameof(options));
-
         Background = background ?? throw new ArgumentNullException(nameof(background));
     }
-
-    public ImmutableArray<IHittable> Objects { get; }
 
     public IBackground Background { get; }
 }

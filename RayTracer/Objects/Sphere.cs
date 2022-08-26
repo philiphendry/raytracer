@@ -6,18 +6,14 @@ namespace RayTracer.Objects;
 
 public class Sphere : IHittable
 {
-    private readonly bool _enableHitCounts;
-
     public Vector3 Origin { get; }
     public float Radius { get; }
     public IMaterial Material { get; }
 
-    private int _hitCount;
     private readonly AxisAlignedBoundingBox _boundingBox;
 
-    public Sphere(Vector3 origin, float radius, IMaterial material, bool enableHitCounts)
+    public Sphere(Vector3 origin, float radius, IMaterial material)
     {
-        _enableHitCounts = enableHitCounts;
         Origin = origin;
         Radius = radius;
         Material = material;
@@ -28,9 +24,6 @@ public class Sphere : IHittable
 
     public HitPoint? Hit(Ray ray, float tMin, float tMax)
     {
-        if (_enableHitCounts)
-            Interlocked.Increment(ref _hitCount);
-
         // The equation of a sphere is (x - Cx)^2 + (y - Cy)^2 + (z - Cz)^2 = R^2
         // The vector from the center C to point P is (P - C) which means the equation above can be written (P - C) dot (P - C) = R^2
         // We are trying to calculate if our ray hits the sphere for a value of t so given the ray equation of P(t) = A + tb
@@ -79,10 +72,6 @@ public class Sphere : IHittable
         var phi = (float)Math.Atan2(-point.Z, point.X) + Constants.Pi;
         return (phi / Constants.PiTimes2, theta / Constants.Pi);
     }
-
-    public long HitCount => _hitCount;
-
-    public void DisplayHitCounts(int depth) => Console.WriteLine($"{new string(' ', depth * 2)}{nameof(Sphere)} : {_hitCount:n0}");
 
     public override string ToString() => $"Origin={Origin}, Radius={Radius:n2}, Bounding={BoundingBox()}";
 }
