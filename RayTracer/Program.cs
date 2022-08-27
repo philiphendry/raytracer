@@ -1,7 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Numerics;
 using CommandLine;
 using CommandLine.Text;
+using RayTracer.Objects;
+using RayTracer.Textures;
 using RayTracer.Utilities;
 using ProgressBar = ShellProgressBar.ProgressBar;
 
@@ -35,9 +38,16 @@ public static class Program
     {
         var sceneGenerator = Utility.GetSceneGenerator(options.RenderSceneName);
         var world = sceneGenerator!.Build();
+
         if (options.UseSceneSettings)
         {
             sceneGenerator.ApplySceneSettings(options);
+        }
+
+        if (options.DisableMaterials)
+        {
+            // If materials are disabled then we need to ensure light from the background
+            world.Background = new SolidBackground(new Vector3(1.0f, 1.0f, 1.0f));
         }
 
         var camera = new Camera(options.Width, options);

@@ -7,5 +7,5 @@ public class World : HittableList
         Background = background ?? throw new ArgumentNullException(nameof(background));
     }
 
-    public IBackground Background { get; }
+    public IBackground Background { get; set; }
 }
