@@ -67,7 +67,7 @@ public static class Vector3Utility
     {
         var cosTheta = Math.Min(Vector3.Dot(-vector, normal), 1.0f);
         var rayOutPerpendicular = refractionIndexRatio * (vector + Vector3.Multiply(normal, cosTheta));
-        var rayOutParallel = Vector3.Multiply(normal, -(float)Math.Sqrt(1.0f - rayOutPerpendicular.LengthSquared()));
+        var rayOutParallel = Vector3.Multiply(normal, -MathF.Sqrt(1.0f - rayOutPerpendicular.LengthSquared()));
         return rayOutPerpendicular + rayOutParallel;
     }
 }

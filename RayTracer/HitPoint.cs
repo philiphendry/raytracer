@@ -13,7 +13,14 @@ public struct HitPoint
     public float U { get; }
     public float V { get; }
 
-    public HitPoint(Ray ray, Vector3 point, float t, Vector3 outwardNormal, IMaterial material, float u, float v)
+    public HitPoint(
+        Ray ray, 
+        Vector3 point, 
+        float t, 
+        Vector3 outwardNormal, 
+        IMaterial material, 
+        float u, 
+        float v)
     {
         Point = point;
         T = t;
@@ -23,10 +30,5 @@ public struct HitPoint
         IsFrontFace = Vector3.Dot(ray.Direction, outwardNormal) < 0;
         Normal = IsFrontFace ? outwardNormal : -outwardNormal;
 
-    }
-
-    public HitPoint(Ray ray, float t, Vector3 outwardNormal, IMaterial material, float u, float v) :
-        this(ray, ray.PositionAt(t), t, outwardNormal, material, u, v)
-    {
     }
 }

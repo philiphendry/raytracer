@@ -29,7 +29,7 @@ public class Camera
         _aspectRatio = aspectRatio.Item1 / aspectRatio.Item2;
 
         var theta = Utility.DegreesToRadians(options.VerticalFieldOfView);
-        var h = (float)Math.Tan(theta / 2);
+        var h = MathF.Tan(theta / 2);
         _viewportHeight = 2.0f * h;
         _viewportWidth = _aspectRatio * _viewportHeight;
 

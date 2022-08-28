@@ -36,7 +36,8 @@ public class YzRectangle : IHittable
             return null;
 
         return new HitPoint(
-            ray, 
+            ray,
+            ray.PositionAt(t),
             t, 
             Vector3.UnitX, 
             _material, 

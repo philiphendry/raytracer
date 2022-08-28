@@ -18,8 +18,8 @@ public class DielectricMaterial : MaterialBase
         var refractionIndexRatio = hitPoint.IsFrontFace ? 1.0f / _indexOfRefraction : _indexOfRefraction;
 
         var unitDirection = ray.Direction.Unit();
-        var cosTheta = (float)Math.Min(Vector3.Dot(-unitDirection, hitPoint.Normal), 1.0);
-        var sinTheta = (float)Math.Sqrt(1.0f - cosTheta * cosTheta);
+        var cosTheta = MathF.Min(Vector3.Dot(-unitDirection, hitPoint.Normal), 1.0f);
+        var sinTheta = MathF.Sqrt(1.0f - cosTheta * cosTheta);
 
         var cannotRefract = refractionIndexRatio * sinTheta > 1.0f;
         var refractedDirection = cannotRefract || Reflectance(cosTheta) > Utility.Random()
@@ -38,6 +38,6 @@ public class DielectricMaterial : MaterialBase
     {
         var r0 = (1 - _indexOfRefraction) / (1 + _indexOfRefraction);
         r0 *= r0;
-        return r0 + (1 - r0) * (float)Math.Pow(1 - cosine, 5.0f);
+        return r0 + (1 - r0) * MathF.Pow(1 - cosine, 5.0f);
     }
 }

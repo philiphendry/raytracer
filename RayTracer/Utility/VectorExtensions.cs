@@ -4,9 +4,10 @@ namespace RayTracer.Utilities;
 
 public static class VectorExtensions
 {
+    private const float SmallestFloat = 0.000001f;
     public static Vector3 Unit(this Vector3 vector) => Vector3.Divide(vector, vector.Length());
 
-    public static bool NearZero(this Vector3 vector) => vector.X < float.Epsilon && vector.Y < float.Epsilon && vector.Z < float.Epsilon;
+    public static bool NearZero(this Vector3 vector) => MathF.Abs(vector.X) < SmallestFloat && Math.Abs(vector.Y) < SmallestFloat && Math.Abs(vector.Z) < SmallestFloat;
 
     public static float GetAxisByIndex(this Vector3 vector, int index)
     {
@@ -24,9 +25,9 @@ public static class VectorExtensions
         var scale = 1.0f / samplesPerPixel;
 
         // Gamma correct with a factor of 2 which means raising colour to the power 1/gamma which in this case is the square root
-        var r = (float)Math.Sqrt(scale * vectorColour.X);
-        var g = (float)Math.Sqrt(scale * vectorColour.Y);
-        var b = (float)Math.Sqrt(scale * vectorColour.Z);
+        var r = MathF.Sqrt(scale * vectorColour.X);
+        var g = MathF.Sqrt(scale * vectorColour.Y);
+        var b = MathF.Sqrt(scale * vectorColour.Z);
 
         return Color.FromArgb(
             (int)(Math.Clamp(r, 0.0f, 0.999f) * 256), 

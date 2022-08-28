@@ -37,6 +37,7 @@ public class XyRectangle : IHittable
 
         return new HitPoint(
             ray, 
+            ray.PositionAt(t),
             t, 
             Vector3.UnitZ, 
             _material, 

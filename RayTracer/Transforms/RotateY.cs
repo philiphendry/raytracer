@@ -6,8 +6,8 @@ namespace RayTracer.Transforms;
 public class RotateY : IHittable
 {
     private readonly IHittable _hittable;
-    private readonly double _sinTheta;
-    private readonly double _cosTheta;
+    private readonly float _sinTheta;
+    private readonly float _cosTheta;
     private readonly AxisAlignedBoundingBox? _boundingBox;
 
     public RotateY(IHittable hittable, float angle)
@@ -15,8 +15,8 @@ public class RotateY : IHittable
         _hittable = hittable;
 
         var radians = Utility.DegreesToRadians(angle);
-        _sinTheta = Math.Sin(radians);
-        _cosTheta = Math.Cos(radians);
+        _sinTheta = MathF.Sin(radians);
+        _cosTheta = MathF.Cos(radians);
         _boundingBox = hittable.BoundingBox();
 
         var min = new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
@@ -32,8 +32,8 @@ public class RotateY : IHittable
                     var y = j * _boundingBox.Maximum.Y + (1 - j) * _boundingBox.Minimum.Y;
                     var z = k * _boundingBox.Maximum.Z + (1 - k) * _boundingBox.Minimum.Z;
 
-                    var newX = (float)(_cosTheta * x + _sinTheta * z);
-                    var newZ = (float)(-_sinTheta * x + _cosTheta * z);
+                    var newX = _cosTheta * x + _sinTheta * z;
+                    var newZ = -_sinTheta * x + _cosTheta * z;
 
                     min.X = Math.Min(min.X, newX);
                     min.Y = Math.Min(min.Y, y);

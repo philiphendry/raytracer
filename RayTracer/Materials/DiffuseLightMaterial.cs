@@ -13,7 +13,9 @@ public class DiffuseLightMaterial : MaterialBase
     {
     }
 
-    public override (Vector3 attenuation, Ray scatteredRay)? Scatter(Ray ray, HitPoint hitPoint) => null;
+    public override (Vector3 attenuation, Ray scatteredRay)? Scatter(Ray ray, HitPoint hitPoint) 
+        => null;
 
-    public override Vector3 Emitted(float u, float v, Vector3 point) => Texture.Value(u, v, point);
+    public override Vector3 Emitted(float u, float v, Vector3 point) 
+        => Texture.Value(u, v, point);
 }

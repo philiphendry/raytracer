@@ -31,28 +31,29 @@ public class RayColourer
             return world.Background.GetColour(ray);
         }
 
+        var hp = hitPoint.Value;
         if (_useNormalMaterial)
         {
             // Because we have a unit normal we can convert to a colour
             return Vector3.Multiply(
                 new Vector3(
-                    hitPoint.Value.Normal.X + 1.0f, 
-                    hitPoint.Value.Normal.Y + 1.0f,
-                    hitPoint.Value.Normal.Z + 1.0f), 
+                    hp.Normal.X + 1.0f, 
+                    hp.Normal.Y + 1.0f,
+                    hp.Normal.Z + 1.0f), 
                 0.5f);
         }
 
         if (_disableMaterials)
         {
             var target = _disableLambertian
-                ? hitPoint.Value.Point + Vector3Utility.RandomInHemisphere(hitPoint.Value.Normal)
-                : hitPoint.Value.Point + hitPoint.Value.Normal + Vector3Utility.RandomUnitVector();
+                ? hp.Point + Vector3Utility.RandomInHemisphere(hp.Normal)
+                : hp.Point + hp.Normal + Vector3Utility.RandomUnitVector();
 
-            return 0.5f * RayColour(new Ray(hitPoint.Value.Point, target - hitPoint.Value.Point), world, depth - 1);
+            return 0.5f * RayColour(new Ray(hp.Point, target - hp.Point), world, depth - 1);
         }
 
-        var emitted = hitPoint.Value.Material.Emitted(hitPoint.Value.U, hitPoint.Value.V, hitPoint.Value.Point);
-        var scatterResult = hitPoint.Value.Material.Scatter(ray, hitPoint.Value);
+        var emitted = hp.Material.Emitted(hp.U, hp.V, hp.Point);
+        var scatterResult = hp.Material.Scatter(ray, hp);
 
         return scatterResult == null
             ? emitted

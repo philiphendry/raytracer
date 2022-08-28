@@ -20,7 +20,7 @@ public class CheckerTexture : Texture
 
     public override Vector3 Value(float u, float v, Vector3 p)
     {
-        var sines = (float)(Math.Sin(10 * p.X) * Math.Sin(10 * p.Y) * Math.Sin(10 * p.Z));
+        var sines = MathF.Sin(10 * p.X) * MathF.Sin(10 * p.Y) * MathF.Sin(10 * p.Z);
         return sines < 0 ? _odd.Value(u, v, p) : _even.Value(u, v, p);
     }
 }

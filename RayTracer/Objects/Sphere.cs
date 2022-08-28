@@ -45,12 +45,11 @@ public class Sphere : IHittable
         // i.e. positive means two solutions, zero just one and negative means the solutions result in complex numbers.
         //var discriminant = b * b - 4.0f * a * c;
         var discriminant = halfB * halfB - a * c;
-        var sqrtDiscriminant = (float)Math.Sqrt(discriminant);
-
         if (discriminant < 0)
             return null;
 
         // Find the closest root that lies in the tMin/tMax range		
+        var sqrtDiscriminant = MathF.Sqrt(discriminant);
         var root = (-halfB - sqrtDiscriminant) / a;
         if (root < tMin || root > tMax)
         {
@@ -59,17 +58,18 @@ public class Sphere : IHittable
                 return null;
         }
 
-        var outwardNormal = (ray.PositionAt(root) - Origin) / Radius;
+        var point = ray.PositionAt(root);
+        var outwardNormal = (point - Origin) / Radius;
         var tempUv = CalculateUV(outwardNormal);
-        return new HitPoint(ray, root, outwardNormal.Unit(), Material, tempUv.u, tempUv.v);
+        return new HitPoint(ray, point, root, outwardNormal.Unit(), Material, tempUv.u, tempUv.v);
     }
 
     public AxisAlignedBoundingBox BoundingBox(/*float time0, float time1*/) => _boundingBox;
 
     private (float u, float v) CalculateUV(Vector3 point)
     {
-        var theta = (float)Math.Acos(-point.Y);
-        var phi = (float)Math.Atan2(-point.Z, point.X) + Constants.Pi;
+        var theta = MathF.Acos(-point.Y);
+        var phi = MathF.Atan2(-point.Z, point.X) + Constants.Pi;
         return (phi / Constants.PiTimes2, theta / Constants.Pi);
     }
 
