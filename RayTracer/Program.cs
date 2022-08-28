@@ -50,7 +50,7 @@ public static class Program
             world.Background = new SolidBackground(new Vector3(1.0f, 1.0f, 1.0f));
         }
 
-        var camera = new Camera(options.Width, options);
+        var camera = new Camera(options);
         var bitmap = new Bitmap(camera.ImageWidth, camera.ImageHeight);
 
         var timer = new Stopwatch();

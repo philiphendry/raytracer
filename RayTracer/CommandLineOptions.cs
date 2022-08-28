@@ -30,13 +30,13 @@ public class CommandLineOptions
     [Option("aspectratio", Required = false, HelpText = "The aspect ratio of the rendered image expressed in the format n:m. Only provide width or height as the dimension not provided will be calculated.")]
     public string? AspectRatio { get; set; }
 
-    public (float, float) GetAspectRatio()
+    public float GetAspectRatio()
     {
         if (string.IsNullOrEmpty(AspectRatio))
-            return (1.0f, (float)Height / Width);
+            return Height / (float)Width;
 
         var match = Regex.Match(AspectRatio, @"(?<left>\d{1,4}):(?<right>\d{1,4})");
-        return (float.Parse(match.Groups["left"].Value), float.Parse(match.Groups["right"].Value));
+        return float.Parse(match.Groups["left"].Value) / float.Parse(match.Groups["right"].Value);
     }
 
     [Option("samples", Required = false, HelpText = "The number of samples taken for each pixel to anti-alias the final output.", Default = 20)]

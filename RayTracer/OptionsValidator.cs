@@ -19,7 +19,7 @@ public static class OptionsValidator
 
         if (options.ViewOutput && !options.SaveOutput)
         {
-            return "When specifying viewoutput you must also provide saveoutput.";
+            return "When specifying --view you must also provide --save.";
         }
 
         if (!string.IsNullOrEmpty(options.AspectRatio) && !Regex.IsMatch(options.AspectRatio, @"^\d{1,4}:\d{1,4}$"))

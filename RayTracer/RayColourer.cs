@@ -46,10 +46,10 @@ public class RayColourer
         if (_disableMaterials)
         {
             var target = _disableLambertian
-                ? hp.Point + Vector3Utility.RandomInHemisphere(hp.Normal)
-                : hp.Point + hp.Normal + Vector3Utility.RandomUnitVector();
+                ? Vector3Utility.RandomInHemisphere(hp.Normal)
+                : hp.Normal + Vector3Utility.RandomUnitVector();
 
-            return 0.5f * RayColour(new Ray(hp.Point, target - hp.Point), world, depth - 1);
+            return 0.5f * RayColour(new Ray(hp.Point, target), world, depth - 1);
         }
 
         var emitted = hp.Material.Emitted(hp.U, hp.V, hp.Point);
