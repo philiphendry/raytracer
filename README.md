@@ -53,3 +53,5 @@
 ![21 Render 2022 08 26 T18 52 52 Depth 5](renderings/21-render_2022-08-26T18-52-52-depth-5.png)
 
 ![21 Render 2022 08 26 T18 53 31 Depth 6](renderings/21-render_2022-08-26T18-53-31-depth-6.png)
+
+![22 Render 2022 08 28 T13 11 44](renderings/22-render_2022-08-28T13-11-44.png)

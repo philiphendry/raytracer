@@ -9,9 +9,9 @@ public class CornellBox : ISceneGenerator
 {
     public void ApplySceneSettings(CommandLineOptions options)
     {
-        options.Width = 600;
+        options.Width = 400;
         options.AspectRatio = "1:1";
-        options.Samples = 50;
+        options.Samples = 20;
         options.MaxDepth = 3;
         options.CameraPosition = "278,278,-800";
         options.CameraLookAt = "278,278,0";
@@ -39,6 +39,8 @@ public class CornellBox : ISceneGenerator
         worldObjects.Add(new XzRectangle(0.0f, 555.0f, 0.0f, 555.0f, 555.0f, whiteMaterial)); // ceiling
         worldObjects.Add(new XzRectangle(0.0f, 555.0f, 0.0f, 555.0f, 0.0f, whiteMaterial)); // floor
         worldObjects.Add(new XyRectangle(0.0f, 555.0f, 0.0f, 555.0f, 555.0f, whiteMaterial)); // back wall
+
+        worldObjects.Add(new Sphere(new Vector3(100.0f, 470.0f, 100.0f), 50.0f, metalMaterial));
 
         IHittable box1 = new Box(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(165.0f, 330.0f, 165.0f), metalMaterial);
         box1 = new RotateY(box1, 15.0f);
