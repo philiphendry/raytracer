@@ -17,6 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Scenes\Images\outdoor_field.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scenes\Images\outdoor_shanghai.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scenes\Images\solitude_interior.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Images\checkerboard-squares-black-white.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
