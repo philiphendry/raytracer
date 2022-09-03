@@ -1,9 +1,9 @@
-﻿using System.Collections.Immutable;
-using System.Numerics;
+﻿using System.Numerics;
 using RayTracer.Materials;
 using RayTracer.Objects;
+using RayTracer.Objects.Backgrounds;
 using RayTracer.Textures;
-using RayTracer.Utilities;
+using RayTracer.Utility;
 
 namespace RayTracer.Scenes;
 
@@ -37,10 +37,10 @@ public class ManyBalls : ISceneGenerator
             {
                 for (int i = 0; i < ballsPerCell; i++)
                 {
-                    var origin = new Vector3(a + 0.9f * Utility.Random(), 0.2f, b + 0.9f * Utility.Random());
+                    var origin = new Vector3(a + 0.9f * Util.Random(), 0.2f, b + 0.9f * Util.Random());
                     if ((origin - new Vector3(4.0f, 0.2f, 0.0f)).Length() > 0.9f)
                     {
-                        var randomMaterial = Utility.Random();
+                        var randomMaterial = Util.Random();
                         if (randomMaterial < 0.7)
                         {
                             var albedo = Vector3Utility.Random() * Vector3Utility.Random();
@@ -50,7 +50,7 @@ public class ManyBalls : ISceneGenerator
                         else if (randomMaterial < 0.9)
                         {
                             var albedo = Vector3Utility.Random(0.5f, 1.0f);
-                            var fuzz = Utility.Random(0.0f, 0.5f);
+                            var fuzz = Util.Random(0.0f, 0.5f);
                             var material = new MetalMaterial(albedo, fuzz);
                             worldObjects.Add(new Sphere(origin, 0.2f, material));
                         }

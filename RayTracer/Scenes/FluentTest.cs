@@ -2,6 +2,7 @@
 using RayTracer.Objects;
 using RayTracer.Textures;
 using System.Numerics;
+using RayTracer.Objects.Backgrounds;
 
 namespace RayTracer.Scenes;
 
@@ -9,17 +10,6 @@ public class FluentTest : ISceneGenerator
 {
     public World Build()
     {
-        /*
-         World
-            .Create()
-            .AddBackground()
-            .AddSphere().Origin.X().Y().Z().Radius().Material()
-            .AddBox().Rotate.X().Y().Z().Translate.X()
-            .AddPlane().EdgeX().EdgeY()
-            .AddPlane().EdgeX().EdgeZ()
-            .Build();
-         */
-
         var metalMaterial = new MetalMaterial(new Vector3(0.9f, 0.1f, 0.1f), 0.5f);
 
         return WorldBuilder
@@ -49,12 +39,15 @@ public class FluentTest : ISceneGenerator
 
 public class WorldBuilder
 {
+    public static readonly IMaterial DefaultWhiteMaterial = new LambertianMaterial(new SolidColourTexture(new Vector3(1.0f, 1.0f, 1.0f)));
+
     private readonly List<IHittable> _worldObjects = new();
     private IBackground? _background;
 
     private WorldBuilder() { }
 
     public static WorldBuilder Create() => new();
+
 
     public WorldBuilder AddBackground(IBackground background)
     {
@@ -90,13 +83,13 @@ public class WorldBuilder
 
 public abstract class ObjectBuilderBase<TObj, TReturn>
 {
-    private static readonly IMaterial DefaultWhiteMaterial = new LambertianMaterial(new SolidColour(new Vector3(1.0f, 1.0f, 1.0f)));
-
+    // ReSharper disable InconsistentNaming
     private protected readonly Func<TObj, TReturn> _returnCallback;
-    private protected IMaterial _material = DefaultWhiteMaterial;
+    private protected IMaterial _material = WorldBuilder.DefaultWhiteMaterial;
     private protected float _x;
     private protected float _y;
     private protected float _z;
+    // ReSharper restore InconsistentNaming
 
     protected ObjectBuilderBase(Func<TObj, TReturn> returnCallback) => _returnCallback = returnCallback;
 

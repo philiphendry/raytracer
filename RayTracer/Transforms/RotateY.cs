@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using RayTracer.Utilities;
+using RayTracer.Utility;
 
 namespace RayTracer.Transforms;
 
@@ -14,7 +14,7 @@ public class RotateY : IHittable
     {
         _hittable = hittable;
 
-        var radians = Utility.DegreesToRadians(angle);
+        var radians = Util.DegreesToRadians(angle);
         _sinTheta = MathF.Sin(radians);
         _cosTheta = MathF.Cos(radians);
         _boundingBox = hittable.BoundingBox();
@@ -54,11 +54,11 @@ public class RotateY : IHittable
         var origin = ray.Origin;
         var direction = ray.Direction;
 
-        origin.X = (float)(_cosTheta * ray.Origin.X - _sinTheta * ray.Origin.Z);
-        origin.Z = (float)(_sinTheta * ray.Origin.X + _cosTheta * ray.Origin.Z);
+        origin.X = _cosTheta * ray.Origin.X - _sinTheta * ray.Origin.Z;
+        origin.Z = _sinTheta * ray.Origin.X + _cosTheta * ray.Origin.Z;
 
-        direction.X = (float)(_cosTheta * ray.Direction.X - _sinTheta * ray.Direction.Z);
-        direction.Z = (float)(_sinTheta * ray.Direction.X + _cosTheta * ray.Direction.Z);
+        direction.X = _cosTheta * ray.Direction.X - _sinTheta * ray.Direction.Z;
+        direction.Z = _sinTheta * ray.Direction.X + _cosTheta * ray.Direction.Z;
 
         var rotatedRay = new Ray(origin, direction);
 
@@ -69,11 +69,11 @@ public class RotateY : IHittable
         var point = hitPoint.Value.Point;
         var normal = hitPoint.Value.Normal;
 
-        point.X = (float)(_cosTheta * hitPoint.Value.Point.X + _sinTheta * hitPoint.Value.Point.Z);
-        point.Z = (float)(- _sinTheta * hitPoint.Value.Point.X + _cosTheta * hitPoint.Value.Point.Z);
+        point.X = _cosTheta * hitPoint.Value.Point.X + _sinTheta * hitPoint.Value.Point.Z;
+        point.Z = - _sinTheta * hitPoint.Value.Point.X + _cosTheta * hitPoint.Value.Point.Z;
 
-        normal.X = (float)(_cosTheta * hitPoint.Value.Normal.X + _sinTheta * hitPoint.Value.Normal.Z);
-        normal.Z = (float)(-_sinTheta * hitPoint.Value.Normal.X + _cosTheta * hitPoint.Value.Normal.Z);
+        normal.X = _cosTheta * hitPoint.Value.Normal.X + _sinTheta * hitPoint.Value.Normal.Z;
+        normal.Z = -_sinTheta * hitPoint.Value.Normal.X + _cosTheta * hitPoint.Value.Normal.Z;
 
         return new HitPoint(
             rotatedRay,

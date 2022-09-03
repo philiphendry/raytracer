@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using RayTracer.Materials;
 using RayTracer.Objects;
+using RayTracer.Objects.Backgrounds;
 using RayTracer.Transforms;
 
 namespace RayTracer.Scenes;
@@ -11,7 +12,7 @@ public class CornellBox : ISceneGenerator
     {
         options.Width = 600;
         options.AspectRatio = "1:1";
-        options.Samples = 1000;
+        options.Samples = 5000;
         options.MaxDepth = 5;
         options.CameraPosition = "278,278,-800";
         options.CameraLookAt = "278,278,0";

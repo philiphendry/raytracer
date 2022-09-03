@@ -27,5 +27,5 @@ public class Box : IHittable
 
     public HitPoint? Hit(Ray ray, float tMin, float tMax) => _sides.Hit(ray, tMin, tMax);
 
-    public AxisAlignedBoundingBox? BoundingBox() => _boundingBox;
+    public AxisAlignedBoundingBox BoundingBox() => _boundingBox;
 }

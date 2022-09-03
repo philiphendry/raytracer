@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using RayTracer.Objects;
-using RayTracer.Utilities;
+using RayTracer.Utility;
 
 namespace RayTracer;
 
@@ -13,9 +13,6 @@ public class Renderer
     private readonly int _samplesPerPixel;
     private readonly int _maxDepth;
     private readonly int _chunkSize;
-    private readonly bool _normalMaterial;
-    private readonly bool _disableLambertian;
-    private readonly bool _disableMaterials;
     private int _completedChunks;
     private readonly int _degreesOfParallelism;
     private readonly RayColourer _rayColourer;
@@ -29,15 +26,12 @@ public class Renderer
         _samplesPerPixel = options.Samples;
         _maxDepth = options.MaxDepth;
         _chunkSize = options.ChunkSize;
-        _normalMaterial = options.NormalMaterial;
-        _disableLambertian = options.DisableLambertian;
-        _disableMaterials = options.DisableMaterials;
         _degreesOfParallelism = 
              Debugger.IsAttached ? 1 : // Whilst debugging only use one thread which makes stepping through code easier!
              options.Parallelism == 0 
                 ? Environment.ProcessorCount 
                 : Math.Min(Environment.ProcessorCount, options.Parallelism);
-        _rayColourer = new RayColourer(_normalMaterial, _disableMaterials, _disableLambertian);
+        _rayColourer = new RayColourer(options.NormalMaterial, options.DisableMaterials, options.DisableLambertian);
     }
 
     public async Task RenderAsync(
@@ -49,8 +43,8 @@ public class Renderer
             return;
 
         var renderTasks = (
-            from chunkX in Utility.ChunkedRange(_camera.ImageWidth, _chunkSize)
-            from chunkY in Utility.ChunkedRange(_camera.ImageHeight, _chunkSize)
+            from chunkX in Util.ChunkedRange(_camera.ImageWidth, _chunkSize)
+            from chunkY in Util.ChunkedRange(_camera.ImageHeight, _chunkSize)
             select (chunkX.Item1, chunkY.Item1, chunkX.Item2, chunkY.Item2)
         ).ToImmutableArray();
 
@@ -122,8 +116,8 @@ public class Renderer
                 for (var s = 0; s < _samplesPerPixel; s++)
                 {
                     // The random value adds jitter to each sample
-                    var u = (x + Utility.Random()) / (_camera.ImageWidth - 1);
-                    var v = (y + Utility.Random()) / (_camera.ImageHeight - 1);
+                    var u = (x + Util.Random()) / (_camera.ImageWidth - 1);
+                    var v = (y + Util.Random()) / (_camera.ImageHeight - 1);
                     var ray = _camera.GetRay(u, v);
                     rayColour += _rayColourer.RayColour(ray, _world, _maxDepth);
                 }

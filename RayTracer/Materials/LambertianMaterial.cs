@@ -1,12 +1,12 @@
 ﻿using System.Numerics;
 using RayTracer.Textures;
-using RayTracer.Utilities;
+using RayTracer.Utility;
 
 namespace RayTracer.Materials;
 
 public class LambertianMaterial : MaterialBase
 {
-    public LambertianMaterial(Vector3 albedo) : base(new SolidColour(albedo))
+    public LambertianMaterial(Vector3 albedo) : base(new SolidColourTexture(albedo))
     {
     }
 

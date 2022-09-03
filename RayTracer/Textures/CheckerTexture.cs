@@ -14,7 +14,7 @@ public class CheckerTexture : Texture
     }
 
     public CheckerTexture(Vector3 evenColour, Vector3 oddColour) 
-        : this(new SolidColour(evenColour), new SolidColour(oddColour))
+        : this(new SolidColourTexture(evenColour), new SolidColourTexture(oddColour))
     {
     }
 

@@ -1,15 +1,15 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
 
-namespace RayTracer.Utilities;
+namespace RayTracer.Utility;
 
 public static class Vector3Utility
 {
     public static Regex VectorRegex = new (@"^(?<x>-?\d+(\.\d+)?),(?<y>-?\d+(\.\d+)?),(?<z>-?\d+(\.\d+)?)$", RegexOptions.Compiled);
 
-    public static Vector3 Random() => new(Utility.Random(), Utility.Random(), Utility.Random());
+    public static Vector3 Random() => new(Util.Random(), Util.Random(), Util.Random());
 
-    public static Vector3 Random(float min, float max) => new(Utility.Random(min, max), Utility.Random(min, max), Utility.Random(min, max));
+    public static Vector3 Random(float min, float max) => new(Util.Random(min, max), Util.Random(min, max), Util.Random(min, max));
 
     public static Vector3 RandomPointInAUnitSphere()
     {
@@ -36,7 +36,7 @@ public static class Vector3Utility
     {
         while (true)
         {
-            var point = new Vector3(Utility.Random(-1.0f, 1.0f), Utility.Random(-1.0f, 1.0f), 0);
+            var point = new Vector3(Util.Random(-1.0f, 1.0f), Util.Random(-1.0f, 1.0f), 0);
             if (point.LengthSquared() >= 1)
                 continue;
             return point;

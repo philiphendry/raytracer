@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using RayTracer.Textures;
-using RayTracer.Utilities;
+using RayTracer.Utility;
 
 namespace RayTracer.Materials;
 
@@ -8,7 +8,7 @@ public class MetalMaterial : MaterialBase
 {
     private readonly float _fuzziness;
 
-    public MetalMaterial(Vector3 albedo, float fuzziness) : base(new SolidColour(albedo))
+    public MetalMaterial(Vector3 albedo, float fuzziness) : base(new SolidColourTexture(albedo))
     {
         _fuzziness = fuzziness;
     }

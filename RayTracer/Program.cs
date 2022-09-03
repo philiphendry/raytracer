@@ -3,9 +3,8 @@ using System.Drawing.Imaging;
 using System.Numerics;
 using CommandLine;
 using CommandLine.Text;
-using RayTracer.Objects;
-using RayTracer.Textures;
-using RayTracer.Utilities;
+using RayTracer.Objects.Backgrounds;
+using RayTracer.Utility;
 using ProgressBar = ShellProgressBar.ProgressBar;
 
 namespace RayTracer;
@@ -36,7 +35,7 @@ public static class Program
 
     private static async Task RunAsync(CommandLineOptions options)
     {
-        var sceneGenerator = Utility.GetSceneGenerator(options.RenderSceneName);
+        var sceneGenerator = Util.GetSceneGenerator(options.RenderSceneName);
         var world = sceneGenerator!.Build();
 
         if (options.UseSceneSettings)

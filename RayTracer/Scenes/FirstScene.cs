@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using RayTracer.Materials;
 using RayTracer.Objects;
+using RayTracer.Objects.Backgrounds;
 
 namespace RayTracer.Scenes;
 

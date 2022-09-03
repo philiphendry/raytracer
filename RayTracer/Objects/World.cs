@@ -1,4 +1,6 @@
-﻿namespace RayTracer.Objects;
+﻿using RayTracer.Objects.Backgrounds;
+
+namespace RayTracer.Objects;
 
 public class World : HittableList
 {

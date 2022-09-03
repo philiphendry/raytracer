@@ -1,9 +1,9 @@
 ﻿using System.Numerics;
 using RayTracer.Scenes;
 
-namespace RayTracer.Utilities;
+namespace RayTracer.Utility;
 
-public static class Utility
+public static class Util
 {
     public static float Random() => (float)System.Random.Shared.NextDouble();
 
@@ -39,7 +39,7 @@ public static class Utility
         var chunkCount = totalCount / chunkSize + (totalCount % chunkSize == 0 ? 0 : 1);
         return Enumerable
             .Repeat(1, chunkCount)
-            .Select((value, index) => (index * chunkSize + 1, index == totalCount / chunkSize ? totalCount : (index + 1) * chunkSize))
+            .Select((_, index) => (index * chunkSize + 1, index == totalCount / chunkSize ? totalCount : (index + 1) * chunkSize))
             .ToArray();
     }
 

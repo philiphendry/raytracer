@@ -9,7 +9,7 @@ public class DiffuseLightMaterial : MaterialBase
     {
     }
 
-    public DiffuseLightMaterial(Vector3 colour) : this(new SolidColour(colour))
+    public DiffuseLightMaterial(Vector3 colour) : this(new SolidColourTexture(colour))
     {
     }
 

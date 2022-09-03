@@ -1,6 +1,6 @@
 using System.Numerics;
 using RayTracer.Objects;
-using RayTracer.Utilities;
+using RayTracer.Utility;
 
 namespace RayTracer;
 

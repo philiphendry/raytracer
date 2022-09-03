@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace RayTracer.Objects;
+namespace RayTracer.Objects.Backgrounds;
 
 public class SolidBackground : IBackground
 {

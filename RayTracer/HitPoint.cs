@@ -29,6 +29,5 @@ public struct HitPoint
         V = v;
         IsFrontFace = Vector3.Dot(ray.Direction, outwardNormal) < 0;
         Normal = IsFrontFace ? outwardNormal : -outwardNormal;
-
     }
 }
