@@ -49,6 +49,7 @@ public class RayColourer
                 ? Vector3Utility.RandomInHemisphere(hp.Normal)
                 : hp.Normal + Vector3Utility.RandomUnitVector();
 
+            // 50% absorption
             return 0.5f * RayColour(new Ray(hp.Point, target), world, depth - 1);
         }
 
