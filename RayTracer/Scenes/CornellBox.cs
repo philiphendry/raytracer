@@ -12,7 +12,7 @@ public sealed class CornellBox : ISceneGenerator
     {
         options.Width = 600;
         options.AspectRatio = "1:1";
-        options.Samples = 200;
+        options.Samples = 10000;
         options.MaxDepth = 5;
         options.CameraPosition = "278,278,-800";
         options.CameraLookAt = "278,278,0";
@@ -46,12 +46,12 @@ public sealed class CornellBox : ISceneGenerator
         IHittable box1 = new Box(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(165.0f, 330.0f, 165.0f), whiteMaterial);
         box1 = new RotateY(box1, 15.0f);
         box1 = new Translate(box1, new Vector3(265.0f, 0.0f, 295.0f));
-        worldObjects.Add(box1);
+        worldObjects.Add(new ConstantMedium(box1, 0.01f, new Vector3(1.0f, 1.0f, 1.0f)));
 
         IHittable box2 = new Box(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(165.0f, 165.0f, 165.0f), glassMaterial);
         box2 = new RotateY(box2, -18.0f);
         box2 = new Translate(box2, new Vector3(130.0f, 0.0f, 65.0f));
-        worldObjects.Add(box2);
+        worldObjects.Add(new ConstantMedium(box2, 0.01f, new Vector3(0.0f, 0.0f, 0.0f)));
 
         var solidBlackBackground = new SolidBackground(new Vector3(0.0f, 0.0f, 0.0f));
         return new World(worldObjects, solidBlackBackground);
