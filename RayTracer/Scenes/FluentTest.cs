@@ -6,7 +6,7 @@ using RayTracer.Objects.Backgrounds;
 
 namespace RayTracer.Scenes;
 
-public class FluentTest : ISceneGenerator
+public sealed class FluentTest : ISceneGenerator
 {
     public World Build()
     {

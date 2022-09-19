@@ -6,7 +6,7 @@ using RayTracer.Utility;
 
 namespace RayTracer;
 
-public class Renderer
+public sealed class Renderer
 {
     private readonly Camera _camera;
     private readonly World _world;
@@ -104,7 +104,7 @@ public class Renderer
         CancellationToken cancellationToken)
     {
         if (cancellationToken.IsCancellationRequested)
-            return null;
+            return null; 
 
         var startTime = DateTime.Now;
         var render = new List<(int, int, Vector3)>();

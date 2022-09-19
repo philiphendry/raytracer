@@ -4,7 +4,7 @@ using RayTracer.Utility;
 
 namespace RayTracer;
 
-public class RayColourer
+public sealed class RayColourer
 {
     private readonly bool _useNormalMaterial;
     private readonly bool _disableMaterials;

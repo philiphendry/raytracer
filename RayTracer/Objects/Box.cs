@@ -3,7 +3,7 @@ using RayTracer.Materials;
 
 namespace RayTracer.Objects;
 
-public class Box : IHittable
+public sealed class Box : IHittable
 {
     private readonly HittableList _sides;
     private readonly AxisAlignedBoundingBox _boundingBox;

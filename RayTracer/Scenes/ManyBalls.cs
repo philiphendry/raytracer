@@ -7,7 +7,7 @@ using RayTracer.Utility;
 
 namespace RayTracer.Scenes;
 
-public class ManyBalls : ISceneGenerator
+public sealed class ManyBalls : ISceneGenerator
 {
     public void ApplySceneSettings(CommandLineOptions options)
     {

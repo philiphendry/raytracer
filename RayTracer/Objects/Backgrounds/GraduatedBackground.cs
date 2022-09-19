@@ -3,7 +3,7 @@ using RayTracer.Utility;
 
 namespace RayTracer.Objects.Backgrounds;
 
-public class GraduatedBackground : IBackground
+public sealed class GraduatedBackground : IBackground
 {
     private readonly Vector3 _white;
     private readonly Vector3 _blue;

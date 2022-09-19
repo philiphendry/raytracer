@@ -4,7 +4,7 @@ using RayTracer.Objects.Backgrounds;
 
 namespace RayTracer.Scenes;
 
-public class BvhTest : ISceneGenerator
+public sealed class BvhTest : ISceneGenerator
 {
     public void ApplySceneSettings(CommandLineOptions options)
     {

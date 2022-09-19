@@ -3,7 +3,7 @@ using RayTracer.Textures;
 
 namespace RayTracer.Materials;
 
-public class DiffuseLightMaterial : MaterialBase
+public sealed class DiffuseLightMaterial : MaterialBase
 {
     public DiffuseLightMaterial(Texture texture) : base(texture)
     {

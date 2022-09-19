@@ -4,7 +4,7 @@ using RayTracer.Utility;
 
 namespace RayTracer.Objects;
 
-public class Sphere : IHittable
+public sealed class Sphere : IHittable
 {
     public Vector3 Origin { get; }
     public float Radius { get; }

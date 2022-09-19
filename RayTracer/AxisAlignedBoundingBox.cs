@@ -3,7 +3,7 @@ using RayTracer.Utility;
 
 namespace RayTracer;
 
-public class AxisAlignedBoundingBox
+public sealed class AxisAlignedBoundingBox
 {
     public readonly Vector3 Minimum;
     public readonly Vector3 Maximum;

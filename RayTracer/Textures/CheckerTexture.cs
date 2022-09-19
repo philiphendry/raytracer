@@ -2,7 +2,7 @@
 
 namespace RayTracer.Textures;
 
-public class CheckerTexture : Texture
+public sealed class CheckerTexture : Texture
 {
     private readonly Texture _even;
     private readonly Texture _odd;

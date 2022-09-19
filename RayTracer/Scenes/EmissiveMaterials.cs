@@ -6,7 +6,7 @@ using RayTracer.Textures;
 
 namespace RayTracer.Scenes;
 
-public class EmissiveMaterials : ISceneGenerator
+public sealed class EmissiveMaterials : ISceneGenerator
 {
     public void ApplySceneSettings(CommandLineOptions options)
     {

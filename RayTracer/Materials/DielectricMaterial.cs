@@ -4,7 +4,7 @@ using RayTracer.Utility;
 
 namespace RayTracer.Materials;
 
-public class DielectricMaterial : MaterialBase
+public sealed class DielectricMaterial : MaterialBase
 {
     private readonly float _indexOfRefraction;
 

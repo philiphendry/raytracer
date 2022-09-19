@@ -3,7 +3,7 @@ using RayTracer.Utility;
 
 namespace RayTracer;
 
-public class BoundedVolumeHierarchyNode : IHittable
+public sealed class BoundedVolumeHierarchyNode : IHittable
 {
     private readonly IHittable _hittableLeft;
     private readonly IHittable? _hittableRight;

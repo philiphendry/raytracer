@@ -3,7 +3,7 @@ using RayTracer.Materials;
 
 namespace RayTracer.Objects;
 
-public class XyRectangle : IHittable
+public sealed class XyRectangle : IHittable
 {
     private readonly float _x0;
     private readonly float _x1;

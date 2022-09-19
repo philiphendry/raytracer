@@ -6,13 +6,13 @@ using RayTracer.Transforms;
 
 namespace RayTracer.Scenes;
 
-public class CornellBox : ISceneGenerator
+public sealed class CornellBox : ISceneGenerator
 {
     public void ApplySceneSettings(CommandLineOptions options)
     {
         options.Width = 600;
         options.AspectRatio = "1:1";
-        options.Samples = 5000;
+        options.Samples = 200;
         options.MaxDepth = 5;
         options.CameraPosition = "278,278,-800";
         options.CameraLookAt = "278,278,0";

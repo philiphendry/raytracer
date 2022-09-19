@@ -1,6 +1,6 @@
 ﻿namespace RayTracer.Utility;
 
-public class Constants
+public sealed class Constants
 {
     // ReSharper disable once InconsistentNaming
     public const float Pi = MathF.PI;

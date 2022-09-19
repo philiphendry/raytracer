@@ -5,7 +5,7 @@ using RayTracer.Objects.Backgrounds;
 
 namespace RayTracer.Scenes;
 
-public class FirstScene : ISceneGenerator
+public sealed class FirstScene : ISceneGenerator
 {
     public void ApplySceneSettings(CommandLineOptions options)
     {

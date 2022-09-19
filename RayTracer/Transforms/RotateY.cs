@@ -3,7 +3,7 @@ using RayTracer.Utility;
 
 namespace RayTracer.Transforms;
 
-public class RotateY : IHittable
+public sealed class RotateY : IHittable
 {
     private readonly IHittable _hittable;
     private readonly float _sinTheta;

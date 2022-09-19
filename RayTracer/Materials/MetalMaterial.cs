@@ -4,7 +4,7 @@ using RayTracer.Utility;
 
 namespace RayTracer.Materials;
 
-public class MetalMaterial : MaterialBase
+public sealed class MetalMaterial : MaterialBase
 {
     private readonly float _fuzziness;
 

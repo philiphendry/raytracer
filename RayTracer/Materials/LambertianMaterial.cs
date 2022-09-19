@@ -4,7 +4,7 @@ using RayTracer.Utility;
 
 namespace RayTracer.Materials;
 
-public class LambertianMaterial : MaterialBase
+public sealed class LambertianMaterial : MaterialBase
 {
     public LambertianMaterial(Vector3 albedo) : base(new SolidColourTexture(albedo))
     {

@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace RayTracer.Textures;
 
-public class ImageTexture : Texture
+public sealed class ImageTexture : Texture
 {
     private readonly int _width;
     private readonly int _height;

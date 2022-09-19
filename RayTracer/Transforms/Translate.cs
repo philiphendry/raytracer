@@ -2,7 +2,7 @@
 
 namespace RayTracer.Transforms;
 
-public class Translate : IHittable
+public sealed class Translate : IHittable
 {
     private readonly IHittable _obj;
     private readonly Vector3 _offset;

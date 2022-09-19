@@ -2,7 +2,7 @@
 
 namespace RayTracer.Textures;
 
-public class SolidColourTexture : Texture
+public sealed class SolidColourTexture : Texture
 {
     private readonly Vector3 _colour;
 

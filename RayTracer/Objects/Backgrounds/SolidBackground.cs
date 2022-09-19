@@ -2,7 +2,7 @@
 
 namespace RayTracer.Objects.Backgrounds;
 
-public class SolidBackground : IBackground
+public sealed class SolidBackground : IBackground
 {
     private readonly Vector3 _colour;
 

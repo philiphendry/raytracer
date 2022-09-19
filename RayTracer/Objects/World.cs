@@ -2,7 +2,7 @@
 
 namespace RayTracer.Objects;
 
-public class World : HittableList
+public sealed class World : HittableList
 {
     public World(IEnumerable<IHittable> worldObjects, IBackground background) : base(worldObjects)
     {

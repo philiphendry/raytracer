@@ -3,7 +3,7 @@ using RayTracer.Utility;
 
 namespace RayTracer;
 
-public class Camera
+public sealed class Camera
 {
     private readonly float _lensRadius;
     private readonly Vector3 _origin;

@@ -4,7 +4,7 @@ using RayTracer.Textures;
 
 namespace RayTracer.Objects.Backgrounds;
 
-public class ImageBackground : IBackground
+public sealed class ImageBackground : IBackground
 {
     private readonly Sphere _sphere;
 
